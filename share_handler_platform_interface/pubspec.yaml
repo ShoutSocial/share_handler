@@ -1,0 +1,21 @@
+name: share_handler_platform_interface
+description: The platform interface for the share_handler plugin.
+repository: https://github.com/AboutShout/share_handler/tree/main/share_handler/share_handler_platform_interface
+
+version: 0.0.1
+
+environment:
+  sdk: ">=2.16.2 <3.0.0"
+  flutter: ">=2.8.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  plugin_platform_interface: ^2.1.0
+
+dev_dependencies:
+  flutter_lints:
+  pigeon:
+  flutter_test:
+    sdk: flutter
+
