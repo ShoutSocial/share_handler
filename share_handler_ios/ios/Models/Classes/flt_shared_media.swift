@@ -1,6 +1,3 @@
-
-public let cShareHandlerUriHost = "flt_share_handler"
-
 public enum FLTSharedAttachmentType: Int, Codable {
     case image
     case video
@@ -71,7 +68,13 @@ public class FLTSharedMedia: Codable {
         return ["attachments": attachments?.map {$0.toDictionary()}, "conversationIdentifier": conversationIdentifier, "content": content, "speakableGroupName": speakableGroupName, "serviceName": serviceName, "senderIdentifier": senderIdentifier, "imageFilePath": imageFilePath]
     }
     
-    public func toJson() -> Data? {
-        return try? JSONEncoder().encode(self)
+    public func toJson() -> Data {
+        var data: Data?
+        do {
+            data = try JSONEncoder().encode(self)
+        } catch {
+            print("failed to encode SharedMedia")
+        }
+        return data!
     }
 }

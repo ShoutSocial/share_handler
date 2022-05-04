@@ -13,7 +13,6 @@ public class SwiftShareHandlerIosPlugin: NSObject, FlutterPlugin, FlutterStreamH
 //     }
 
     static let kEventsChannel = "com.shoutsocial.share_handler/sharedMediaStream"
-    static public let shareHandlerUriHost = cShareHandlerUriHost
 
     private var customSchemePrefix = "ShareMedia"
 
@@ -118,17 +117,23 @@ public class SwiftShareHandlerIosPlugin: NSObject, FlutterPlugin, FlutterStreamH
             let appGroupId = (Bundle.main.object(forInfoDictionaryKey: "AppGroupId") as? String) ?? "group.\(Bundle.main.bundleIdentifier!)"
             let userDefaults = UserDefaults(suiteName: appGroupId)
 
-            let uriHost = url.host ?? ""
             let params = url.queryDictionary
-            if uriHost.starts(with: SwiftShareHandlerIosPlugin.shareHandlerUriHost), let sharedPreferencesKey = params?["key"] {
-                if let data = userDefaults?.data(forKey: sharedPreferencesKey) {
+            if let sharedPreferencesKey = params?["key"] {
+                if let data = userDefaults?.object(forKey: sharedPreferencesKey) as? Data {
                     latestMediaData = data
                     if (setInitialData) {
                         initialMediaData = data
                     }
 
-                    let json = String(data: data, encoding: .utf8)
-                    eventSink?(json)
+                    
+                    if let sharedMedia = try? JSONDecoder().decode(FLTSharedMedia.self, from: data) {
+                        sharedMedia.attachments?.forEach {$0.path = getAbsolutePath(for: $0.path) ?? $0.path}
+                        let map = sharedMedia.toDictionary()
+                        eventSink?(map)
+                    }
+                    
+                    
+                    
                     return true
                 }
             }

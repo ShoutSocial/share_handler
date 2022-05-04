@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:share_handler_ios/share_handler_ios.dart';
 import 'dart:async';
@@ -55,15 +57,18 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Share Handler'),
         ),
         body: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.start,
+          child: ListView(
             children: <Widget>[
               Text("Shared text: ${media?.content}"),
               const SizedBox(height: 10),
               Text("Shared files: ${media?.attachments?.length}"),
               ...(media?.attachments ?? []).map((attachment) {
-                return Text("Attachment: ${attachment?.path}");
+                final _path = attachment?.path;
+                if (_path != null && attachment?.type == SharedAttachmentType.image) {
+                  return Image.file(File(_path));
+                } else {
+                  return Text("${attachment?.type} Attachment: ${attachment?.path}");
+                }
               }),
             ],
           ),

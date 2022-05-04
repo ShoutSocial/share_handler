@@ -2,13 +2,19 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<!-- Add if you want custom group id rather than default -->
+	<key>AppGroupId</key>
+  <string>$(CUSTOM_GROUP_ID)</string>
+	
+	<key>CFBundleVersion</key>
+	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>NSExtension</key>
 	<dict>
 		<key>NSExtensionAttributes</key>
 		<dict>
 			<!-- Replace start -->
-			<key>NSExtensionActivationRule</key>
-			<string>TRUEPREDICATE</string>
+			<!-- <key>NSExtensionActivationRule</key>
+			<string>TRUEPREDICATE</string> -->
 			<!-- Replace end -->
 			<!-- With start -->
 			<!-- You can modify these rules to your liking for which types of share content your app can handle -->

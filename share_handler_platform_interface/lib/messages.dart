@@ -35,8 +35,7 @@ class SharedAttachment {
     final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
     return SharedAttachment(
       path: pigeonMap['path']! as String,
-      type: SharedAttachmentType.values[pigeonMap['type']! as int]
-,
+      type: SharedAttachmentType.values[pigeonMap['type']! as int],
     );
   }
 }
@@ -78,7 +77,10 @@ class SharedMedia {
   static SharedMedia decode(Object message) {
     final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
     return SharedMedia(
-      attachments: (pigeonMap['attachments'] as List<Object?>?)?.cast<SharedAttachment?>(),
+      attachments: (pigeonMap['attachments'] as List<Object?>?)
+          ?.map((e) => SharedAttachment.decode(e as Map<Object?, Object?>))
+          .cast<SharedAttachment?>()
+          .toList(),
       recipientIdentifiers: (pigeonMap['recipientIdentifiers'] as List<Object?>?)?.cast<String?>(),
       conversationIdentifier: pigeonMap['conversationIdentifier'] as String?,
       content: pigeonMap['content'] as String?,
@@ -97,34 +99,31 @@ class _ShareHandlerApiCodec extends StandardMessageCodec {
     if (value is SharedAttachment) {
       buffer.putUint8(128);
       writeValue(buffer, value.encode());
-    } else 
-    if (value is SharedMedia) {
+    } else if (value is SharedMedia) {
       buffer.putUint8(129);
       writeValue(buffer, value.encode());
-    } else 
-    if (value is SharedMedia) {
+    } else if (value is SharedMedia) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
-    } else 
-{
+    } else {
       super.writeValue(buffer, value);
     }
   }
+
   @override
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
-      case 128:       
+      case 128:
         return SharedAttachment.decode(readValue(buffer)!);
-      
-      case 129:       
+
+      case 129:
         return SharedMedia.decode(readValue(buffer)!);
-      
-      case 130:       
+
+      case 130:
         return SharedMedia.decode(readValue(buffer)!);
-      
-      default:      
+
+      default:
         return super.readValueOfType(type, buffer);
-      
     }
   }
 }
@@ -141,9 +140,9 @@ class ShareHandlerApi {
 
   Future<SharedMedia?> getInitialSharedMedia() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.ShareHandlerApi.getInitialSharedMedia', codec, binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
+        'dev.flutter.pigeon.ShareHandlerApi.getInitialSharedMedia', codec,
+        binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap = await channel.send(null) as Map<Object?, Object?>?;
     if (replyMap == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -163,9 +162,9 @@ class ShareHandlerApi {
 
   Future<void> recordSentMessage(SharedMedia arg_media) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.ShareHandlerApi.recordSentMessage', codec, binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(<Object?>[arg_media]) as Map<Object?, Object?>?;
+        'dev.flutter.pigeon.ShareHandlerApi.recordSentMessage', codec,
+        binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap = await channel.send(<Object?>[arg_media]) as Map<Object?, Object?>?;
     if (replyMap == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -185,9 +184,9 @@ class ShareHandlerApi {
 
   Future<void> resetInitialSharedMedia() async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
-        'dev.flutter.pigeon.ShareHandlerApi.resetInitialSharedMedia', codec, binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap =
-        await channel.send(null) as Map<Object?, Object?>?;
+        'dev.flutter.pigeon.ShareHandlerApi.resetInitialSharedMedia', codec,
+        binaryMessenger: _binaryMessenger);
+    final Map<Object?, Object?>? replyMap = await channel.send(null) as Map<Object?, Object?>?;
     if (replyMap == null) {
       throw PlatformException(
         code: 'channel-error',
