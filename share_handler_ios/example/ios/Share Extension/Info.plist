@@ -2,7 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<!-- Add if you want custom group id rather than default -->
+	<!-- Add if you want custom group id rather than default. Set it in Build Settings -> User-Defined -->
 	<key>AppGroupId</key>
   <string>$(CUSTOM_GROUP_ID)</string>
 	
@@ -12,6 +12,12 @@
 	<dict>
 		<key>NSExtensionAttributes</key>
 		<dict>
+			<!-- Add supported message intent if you support sharing to a specific conversation - start -->
+			<key>IntentsSupported</key>
+			<array>
+				<string>INSendMessageIntent</string>
+			</array>
+			<!-- Add supported message intent if you support sharing to a specific conversation - end -->
 			<!-- Replace start -->
 			<!-- <key>NSExtensionActivationRule</key>
 			<string>TRUEPREDICATE</string> -->

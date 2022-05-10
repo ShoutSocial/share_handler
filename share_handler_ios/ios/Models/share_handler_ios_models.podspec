@@ -10,8 +10,8 @@ Pod::Spec.new do |s|
   Shared code for share_handler_ios plugin so main app and share extension targets can use it.
                        DESC
   s.homepage         = 'http://example.com'
-  s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Your Company' => 'email@example.com' }
+  # s.license          = { :file => '../LICENSE' }
+  s.author           = { 'Shout Social' => 'developer@shoutsocial.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.platform = :ios, '9.0'

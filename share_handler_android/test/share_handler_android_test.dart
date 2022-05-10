@@ -2,7 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  const MethodChannel channel = MethodChannel('share_handler_ios');
+  const MethodChannel channel = MethodChannel('share_handler_android');
 
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -17,6 +17,6 @@ void main() {
   });
 
   test('getPlatformVersion', () async {
-    // expect(await ShareHandlerIos.platformVersion, '42');
+    // expect(await ShareHandlerAndroid.platformVersion, '42');
   });
 }

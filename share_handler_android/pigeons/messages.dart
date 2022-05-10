@@ -2,12 +2,10 @@ import 'package:pigeon/pigeon.dart';
 
 @ConfigurePigeon(PigeonOptions(
   dartOut: 'lib/messages.g.dart',
-  objcHeaderOut: 'ios/Classes/messages.h',
-  objcSourceOut: 'ios/Classes/messages.m',
-  objcOptions: ObjcOptions(
-    prefix: 'FLT',
+  javaOut: 'android/src/main/java/com/shoutsocial/share_handler_android/Messages.java',
+  javaOptions: JavaOptions(
+    package: 'com.shoutsocial.share_handler_android',
   ),
-  copyrightHeader: 'pigeons/copyright.txt',
 ))
 enum SharedAttachmentType {
   image,
@@ -48,10 +46,8 @@ class SharedMedia {
 
 @HostApi()
 abstract class ShareHandlerApi {
-  @ObjCSelector('getInitialSharedMedia')
+  @async
   SharedMedia? getInitialSharedMedia();
-  @ObjCSelector('recordSentMessage:')
   void recordSentMessage(SharedMedia media);
-  @ObjCSelector('resetInitialSharedMedia')
   void resetInitialSharedMedia();
 }

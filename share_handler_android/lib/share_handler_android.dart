@@ -5,13 +5,13 @@ import 'package:flutter/services.dart';
 import 'package:share_handler_platform_interface/messages.dart';
 import 'package:share_handler_platform_interface/share_handler_platform_interface.dart';
 
-class ShareHandlerIos extends ShareHandlerPlatform {
+class ShareHandlerAndroid extends ShareHandlerPlatform {
   final ShareHandlerApi _api = ShareHandlerApi();
   static const EventChannel eventChannel = EventChannel("com.shoutsocial.share_handler/sharedMediaStream");
   static Stream<SharedMedia>? _sharedMediaStream;
 
   static void registerWith() {
-    ShareHandlerPlatform.instance = ShareHandlerIos();
+    ShareHandlerPlatform.instance = ShareHandlerAndroid();
   }
 
   @override

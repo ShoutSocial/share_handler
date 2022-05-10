@@ -33,7 +33,7 @@ class ShareViewController: SLComposeServiceViewController {
 
 
             // convert ShareExtension id to host app id
-            // By default it is remove last part of id after last point
+            // By default it is everything before the last "."
             // For example: com.test.ShareExtension -> com.test
             let lastIndexOfPoint = shareExtensionAppBundleIdentifier.lastIndex(of: ".");
         ShareViewController.hostAppBundleIdentifier = String(shareExtensionAppBundleIdentifier[..<lastIndexOfPoint!]);

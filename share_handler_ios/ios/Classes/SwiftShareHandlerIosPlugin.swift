@@ -259,7 +259,7 @@ public class SwiftShareHandlerIosPlugin: NSObject, FlutterPlugin, FlutterStreamH
                     if err != nil {
                         error.pointee = FlutterError.init(code: "NATIVE_ERR", message: "Error: donating insendmessage intent", details: nil)
                     } else {
-                        // Do something, e.g. send the content to a contact.
+                        print("Successfully dontated INSendMessageIntent")
                     }
                 })
             }

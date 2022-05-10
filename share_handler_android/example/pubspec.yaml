@@ -1,5 +1,5 @@
-name: share_handler_ios_example
-description: Demonstrates how to use the share_handler_ios plugin.
+name: share_handler_android_example
+description: Demonstrates how to use the share_handler_android plugin.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -20,9 +20,9 @@ dependencies:
 
   share_handler_platform_interface:
     path: "../../share_handler_platform_interface"
-  share_handler_ios:
+  share_handler_android:
     # When depending on this package from a real application you should use:
-    #   share_handler_ios: ^x.y.z
+    #   share_handler_android: ^x.y.z
     # See https://dart.dev/tools/pub/dependencies#version-constraints
     # The example app is bundled with the plugin so we use a path dependency on
     # the parent directory to use the current plugin's version.
