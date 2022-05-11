@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:share_handler_ios/share_handler_ios.dart';
 import 'dart:async';
 
 import 'package:share_handler_platform_interface/messages.dart';
