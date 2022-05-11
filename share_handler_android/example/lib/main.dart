@@ -59,13 +59,31 @@ class _MyAppState extends State<MyApp> {
         body: Center(
           child: ListView(
             children: <Widget>[
+              Text("Shared to conversation identifier: ${media?.conversationIdentifier}"),
+              const SizedBox(height: 10),
               Text("Shared text: ${media?.content}"),
               const SizedBox(height: 10),
               Text("Shared files: ${media?.attachments?.length}"),
               ...(media?.attachments ?? []).map((attachment) {
                 final _path = attachment?.path;
                 if (_path != null && attachment?.type == SharedAttachmentType.image) {
-                  return Image.file(File(_path));
+                  return Column(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          ShareHandlerPlatform.instance.recordSentMessage(
+                            conversationIdentifier: "custom-conversation-identifier",
+                            conversationName: "John Doe",
+                            conversationImage: File(_path),
+                            serviceName: "custom-service-name",
+                          );
+                        },
+                        child: const Text("Record message"),
+                      ),
+                      const SizedBox(height: 10),
+                      Image.file(File(_path)),
+                    ],
+                  );
                 } else {
                   return Text("${attachment?.type} Attachment: ${attachment?.path}");
                 }

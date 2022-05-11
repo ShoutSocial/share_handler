@@ -14,6 +14,7 @@ dependencies:
     path: ../share_handler_platform_interface
 
 dev_dependencies:
+  pigeon:
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0

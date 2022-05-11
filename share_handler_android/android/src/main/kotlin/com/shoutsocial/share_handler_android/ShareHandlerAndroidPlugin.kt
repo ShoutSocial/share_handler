@@ -20,8 +20,8 @@ import java.net.URLConnection
 private const val kEventsChannel = "com.shoutsocial.share_handler/sharedMediaStream"
 
 /** ShareHandlerAndroidPlugin */
-class ShareHandlerAndroidPlugin: FlutterPlugin, ShareHandlerApi, EventChannel.StreamHandler, ActivityAware, PluginRegistry.NewIntentListener {
-  private var initialMedia: SharedMedia? = null
+class ShareHandlerAndroidPlugin: FlutterPlugin, Messages.ShareHandlerApi, EventChannel.StreamHandler, ActivityAware, PluginRegistry.NewIntentListener {
+  private var initialMedia: Messages.SharedMedia? = null
   private var eventChannel: EventChannel? = null
   private var eventSink: EventChannel.EventSink? = null
 
@@ -32,14 +32,14 @@ class ShareHandlerAndroidPlugin: FlutterPlugin, ShareHandlerApi, EventChannel.St
     applicationContext = flutterPluginBinding.applicationContext
 
     val messenger = flutterPluginBinding.binaryMessenger
-    ShareHandlerApi.setup(messenger, this)
+    Messages.ShareHandlerApi.setup(messenger, this)
 
     eventChannel = EventChannel(messenger, kEventsChannel)
     eventChannel?.setStreamHandler(this)
   }
 
   override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
-    ShareHandlerApi.setup(binding.binaryMessenger, null)
+    Messages.ShareHandlerApi.setup(binding.binaryMessenger, null)
   }
 
 //  override fun getInitialSharedMedia(result: Result<SharedMedia>?) {
@@ -76,17 +76,24 @@ class ShareHandlerAndroidPlugin: FlutterPlugin, ShareHandlerApi, EventChannel.St
 //    ShortcutManagerCompat.addDynamicShortcuts(applicationContext, listOf(shortcut))
 //  }
 
-  override fun getInitialSharedMedia(result: Result<SharedMedia>?) {
+  override fun getInitialSharedMedia(result: Messages.Result<Messages.SharedMedia>?) {
     result?.success(initialMedia)
   }
 
-  override fun recordSentMessage(media: SharedMedia) {
+  override fun recordSentMessage(media: Messages.SharedMedia) {
     val packageName = applicationContext.packageName
+    val intent = Intent(applicationContext, Class.forName("$packageName.MainActivity")).apply {
+      action = Intent.ACTION_SEND
+      putExtra("conversationIdentifier", media.conversationIdentifier)
+    }
+//    val intent = Intent(Intent.ACTION_VIEW).apply {
+//      putExtra("conversationIdentifier", media.conversationIdentifier)
+//    }
     val shortcutTarget = "$packageName.dynamic_share_target"
     val shortcutBuilder = ShortcutInfoCompat.Builder(applicationContext, media.conversationIdentifier ?: "").setShortLabel(media.speakableGroupName ?: "Unknown")
       .setIsConversation()
       .setCategories(setOf(shortcutTarget))
-      .setIntent(Intent(Intent.ACTION_DEFAULT))
+      .setIntent(intent)
       .setLongLived(true)
 
     val personBuilder = Person.Builder()
@@ -145,7 +152,7 @@ class ShareHandlerAndroidPlugin: FlutterPlugin, ShareHandlerApi, EventChannel.St
   }
 
   private fun handleIntent(intent: Intent, initial: Boolean) {
-    val attachments: List<SharedAttachment>?
+    val attachments: List<Messages.SharedAttachment>?
     val text: String?
     when {
       (intent.type?.startsWith("text") != true)
@@ -163,19 +170,23 @@ class ShareHandlerAndroidPlugin: FlutterPlugin, ShareHandlerApi, EventChannel.St
       intent.action == Intent.ACTION_VIEW -> { // Opening URL
         attachments = null
         text = intent.dataString
-      } else -> {
+      }
+      else -> {
         attachments = null
         text = null
       }
     }
-    if (attachments != null || text != null) {
-      val media = SharedMedia(attachments = attachments, content = text)
+//    val conversationIdentifier = intent.getStringExtra(Intent.EXTRA_SHORTCUT_ID)
+    val conversationIdentifier = intent.getStringExtra("android.intent.extra.shortcut.ID") ?: intent.getStringExtra("conversationIdentifier")
+    if (attachments != null || text != null || conversationIdentifier != null) {
+//      val media = SharedMedia(attachments = attachments, content = text)
+      val media = Messages.SharedMedia.Builder().setAttachments(attachments).setContent(text).setConversationIdentifier(conversationIdentifier).build()
       if (initial) initialMedia = media
       eventSink?.success(media.toMap())
     }
   }
 
-  private fun attachmentsFromIntent(intent: Intent?): List<SharedAttachment>? {
+  private fun attachmentsFromIntent(intent: Intent?): List<Messages.SharedAttachment>? {
     if (intent == null) return null
     return when (intent.action) {
       Intent.ACTION_SEND -> {
@@ -193,23 +204,24 @@ class ShareHandlerAndroidPlugin: FlutterPlugin, ShareHandlerApi, EventChannel.St
     }
   }
 
-  private fun attachmentForUri(uri: Uri): SharedAttachment? {
+  private fun attachmentForUri(uri: Uri): Messages.SharedAttachment? {
     val path = FileDirectory.getAbsolutePath(applicationContext, uri)
     return if (path != null) {
       val type = getAttachmentType(path)
-      SharedAttachment(path = path, type = type)
+//      SharedAttachment(path = path, type = type)
+      Messages.SharedAttachment.Builder().setPath(path).setType(type).build()
     } else {
       null
     }
   }
 
-  private fun getAttachmentType(path: String?): SharedAttachmentType {
+  private fun getAttachmentType(path: String?): Messages.SharedAttachmentType {
     val mimeType = URLConnection.guessContentTypeFromName(path)
     return when {
-      mimeType?.startsWith("image") == true -> SharedAttachmentType.Image
-      mimeType?.startsWith("video") == true -> SharedAttachmentType.Video
-      mimeType?.startsWith("audio") == true -> SharedAttachmentType.Audio
-      else -> SharedAttachmentType.File
+      mimeType?.startsWith("image") == true -> Messages.SharedAttachmentType.image
+      mimeType?.startsWith("video") == true -> Messages.SharedAttachmentType.video
+      mimeType?.startsWith("audio") == true -> Messages.SharedAttachmentType.audio
+      else -> Messages.SharedAttachmentType.file
     }
   }
 }
