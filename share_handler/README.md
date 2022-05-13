@@ -493,7 +493,6 @@ end
             <!-- TODO: (Optional) Add these meta-data tags if you want to support sharing to a specific target/conversation/shortcut (via the recordSentMessage api) -->
             <meta-data
                 android:name="android.service.chooser.chooser_target_service"
-                android:exported="true"
                 android:value="androidx.sharetarget.ChooserTargetServiceCompat" />
             <meta-data
                 android:name="android.app.shortcuts"
