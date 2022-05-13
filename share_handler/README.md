@@ -504,9 +504,7 @@ end
 </manifest>
 ```
 2. (Optional) If you want to prevent incoming shares from opening a new activity each time, add the attribute `android:launchMode="singleTask"` to your MainActivity intent inside your AndroidManifest.xml file.
-3. (Optional) Add required dependency and file to support share suggestions/shortcuts in to your app.
-	- Add the following dependency to the 'dependencies' section of the gradle file at `<project root>/android/app/build.gradle`:
-	`implementation("androidx.sharetarget:sharetarget:1.1.0")`
+3. (Optional) Add required file to support share suggestions/shortcuts in to your app.
 	- Create the file `<project root>/android/app/src/main/res/xml/share_targets.xml` with the following contents, replacing `{your.package.identifier}` with your package identifier (ex. con.shoutsocial.share_handler_android_example):
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
