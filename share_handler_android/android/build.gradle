@@ -1,11 +1,11 @@
-group 'com.shoutsocial.share_handler_android'
+group 'com.shoutsocial.share_handler'
 version '1.0-SNAPSHOT'
 
 buildscript {
     ext.kotlin_version = '1.6.21'
     repositories {
         google()
-        mavenCentral()
+        jcenter()
     }
 
     dependencies {
@@ -17,7 +17,7 @@ buildscript {
 rootProject.allprojects {
     repositories {
         google()
-        mavenCentral()
+        jcenter()
     }
 }
 
@@ -47,5 +47,5 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation("androidx.sharetarget:sharetarget:1.2.0")
+    implementation("androidx.sharetarget:sharetarget:1.2.0-rc01")
 }

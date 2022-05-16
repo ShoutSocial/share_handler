@@ -1,4 +1,4 @@
 #import <Flutter/Flutter.h>
 
-@interface ShareHandlerIosPlugin : NSObject<FlutterPlugin>
+@interface ShareHandlerIosPlatform : NSObject<FlutterPlugin>
 @end

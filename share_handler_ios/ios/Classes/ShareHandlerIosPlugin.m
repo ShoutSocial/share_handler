@@ -8,8 +8,8 @@
 #import "share_handler_ios-Swift.h"
 #endif
 
-@implementation ShareHandlerIosPlugin
+@implementation ShareHandlerIosPlatform
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
-  [SwiftShareHandlerIosPlugin registerWithRegistrar:registrar];
+  [SwiftShareHandlerIosPlatform registerWithRegistrar:registrar];
 }
 @end

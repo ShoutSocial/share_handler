@@ -1,2 +1,2 @@
-## 1.0.0
-- Initial open-source release.
+# 0.0.1
+Initial release of this plugin.

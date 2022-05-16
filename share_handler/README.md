@@ -139,7 +139,7 @@ end
         let textContentType = UTType.text.identifier
         let urlContentType = UTType.url.identifier
         let fileURLType = UTType.fileURL.identifier
-        var sharedAttachments: [FLTSharedAttachment] = []
+        var sharedAttachments: [SharedAttachment] = []
         lazy var userDefaults: UserDefaults = {
             return UserDefaults(suiteName: ShareViewController.appGroupId)!
         }()
@@ -279,7 +279,7 @@ end
                 }
                 
                 if (copied) {
-                    sharedAttachments.append(FLTSharedAttachment.init(path:  newFileUrl.absoluteString, type: .image))
+                    sharedAttachments.append(SharedAttachment.init(path:  newFileUrl.absoluteString, type: .image))
                 } else {
                     dismissWithError()
                     return
@@ -303,7 +303,7 @@ end
                 let newFileUrl = getNewFileUrl(fileName: fileName)
                 let copied = copyFile(at: url, to: newFileUrl)
                 if(copied) {
-                    sharedAttachments.append(FLTSharedAttachment.init(path:  newFileUrl.absoluteString, type: .video))
+                    sharedAttachments.append(SharedAttachment.init(path:  newFileUrl.absoluteString, type: .video))
                 }
             } else {
                 dismissWithError()
@@ -321,7 +321,7 @@ end
                 let newFileUrl = getNewFileUrl(fileName: fileName)
                 let copied = copyFile(at: url, to: newFileUrl)
                 if (copied) {
-                    sharedAttachments.append(FLTSharedAttachment.init(path:  newFileUrl.absoluteString, type: .file))
+                    sharedAttachments.append(SharedAttachment.init(path:  newFileUrl.absoluteString, type: .file))
                 }
             } else {
                 dismissWithError()
@@ -356,7 +356,7 @@ end
             let serviceName = intent?.serviceName
             let speakableGroupName = intent?.speakableGroupName
             
-            let sharedMedia = FLTSharedMedia.init(attachments: sharedAttachments, conversationIdentifier: conversationIdentifier, content: sharedText.joined(separator: "\n"), speakableGroupName: speakableGroupName?.spokenPhrase, serviceName: serviceName, senderIdentifier: sender?.contactIdentifier ?? sender?.customIdentifier, imageFilePath: nil)
+            let sharedMedia = SharedMedia.init(attachments: sharedAttachments, conversationIdentifier: conversationIdentifier, content: sharedText.joined(separator: "\n"), speakableGroupName: speakableGroupName?.spokenPhrase, serviceName: serviceName, senderIdentifier: sender?.contactIdentifier ?? sender?.customIdentifier, imageFilePath: nil)
             
             let json = sharedMedia.toJson()
             
@@ -378,7 +378,7 @@ end
             case file
         }
         
-        func getExtension(from url: URL, type: FLTSharedAttachmentType) -> String {
+        func getExtension(from url: URL, type: SharedAttachmentType) -> String {
             let parts = url.lastPathComponent.components(separatedBy: ".")
             var ex: String? = nil
             if (parts.count > 1) {
@@ -400,7 +400,7 @@ end
             return ex ?? "Unknown"
         }
         
-        func getFileName(from url: URL, type: FLTSharedAttachmentType) -> String {
+        func getFileName(from url: URL, type: SharedAttachmentType) -> String {
             var name = url.lastPathComponent
             
             if (name.isEmpty) {

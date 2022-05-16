@@ -1,13 +1,13 @@
 #
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
-# Run `pod lib lint share_handler_ios.podspec` to validate before publishing.
+# Run `pod lib lint share_handler.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
   s.name             = 'share_handler_ios'
   s.version          = '0.0.1'
-  s.summary          = 'A new flutter plugin project.'
+  s.summary          = 'iOS implementation of the share_handler plugin.'
   s.description      = <<-DESC
-A new flutter plugin project.
+  iOS implementation of the share_handler plugin.
                        DESC
   s.homepage         = 'http://example.com'
   s.license          = { :file => '../LICENSE' }
