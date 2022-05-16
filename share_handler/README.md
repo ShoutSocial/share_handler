@@ -611,3 +611,7 @@ class _MyAppState extends State<MyApp> {
   }
 }
 ```
+
+## Attributions
+
+Special thanks to the contributors of the receive_sharing_intent package from which I garnered a lot of code/logic and built thereon - https://github.com/KasemJaffer/receive_sharing_intent. It seemed to not be maintained and not responsive to issues/feature requests, hence the new package.
