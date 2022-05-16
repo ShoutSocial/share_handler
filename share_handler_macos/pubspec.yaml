@@ -1,5 +1,6 @@
 name: share_handler_macos
 description: An implementation for the macOS platform of the Flutter share_handler plugin.
+repository: https://github.com/AboutShout/share_handler/tree/main/share_handler_macos
 version: 0.0.1
 publish_to: none
 
