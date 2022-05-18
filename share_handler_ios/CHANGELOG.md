@@ -1,3 +1,5 @@
+# 0.0.3
+Updated platform interface dependency
 # 0.0.2
 Updated License
 Updated platform interface dependency

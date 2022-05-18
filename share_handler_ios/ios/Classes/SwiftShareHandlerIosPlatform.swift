@@ -16,8 +16,8 @@ public class SwiftShareHandlerIosPlatform: NSObject, FlutterPlugin, FlutterStrea
 
     private var customSchemePrefix = "ShareMedia"
 
-    private var initialMediaData: Data? = nil
-    private var latestMediaData: Data? = nil
+    private var initialMedia: SharedMedia? = nil
+    private var latestMedia: SharedMedia? = nil
 
     private var eventSink: FlutterEventSink? = nil;
 
@@ -28,7 +28,7 @@ public class SwiftShareHandlerIosPlatform: NSObject, FlutterPlugin, FlutterStrea
 
     public static func register(with registrar: FlutterPluginRegistrar) {
         let messenger : FlutterBinaryMessenger = registrar.messenger()
-        let api : ShareHandlerApi & NSObjectProtocol = SwiftShareHandlerIosPlatform.init()
+        let api : ShareHandlerApi & NSObjectProtocol = instance
         ShareHandlerApiSetup(messenger, api)
 
         let eventsChannel = FlutterEventChannel(name: kEventsChannel, binaryMessenger: messenger)
@@ -120,14 +120,13 @@ public class SwiftShareHandlerIosPlatform: NSObject, FlutterPlugin, FlutterStrea
             let params = url.queryDictionary
             if let sharedPreferencesKey = params?["key"] {
                 if let data = userDefaults?.object(forKey: sharedPreferencesKey) as? Data {
-                    latestMediaData = data
-                    if (setInitialData) {
-                        initialMediaData = data
-                    }
-
                     
                     if let sharedMedia = try? JSONDecoder().decode(SharedMedia.self, from: data) {
                         sharedMedia.attachments?.forEach {$0.path = getAbsolutePath(for: $0.path) ?? $0.path}
+                        latestMedia = sharedMedia
+                        if (setInitialData) {
+                            initialMedia = sharedMedia
+                        }
                         let map = sharedMedia.toDictionary()
                         eventSink?(map)
                     }
@@ -195,7 +194,7 @@ public class SwiftShareHandlerIosPlatform: NSObject, FlutterPlugin, FlutterStrea
 //            }
 //            return true
         }
-        latestMediaData = nil
+        latestMedia = nil
         return false
     }
 
@@ -227,7 +226,7 @@ public class SwiftShareHandlerIosPlatform: NSObject, FlutterPlugin, FlutterStrea
     }
 
     func getInitialSharedMedia(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> SharedMedia? {
-        let sharedMedia = SharedMedia.fromJson(data: initialMediaData)
+        let sharedMedia = initialMedia
         return sharedMedia
     }
 
@@ -269,7 +268,7 @@ public class SwiftShareHandlerIosPlatform: NSObject, FlutterPlugin, FlutterStrea
     }
 
     public func resetInitialSharedMedia(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
-        initialMediaData = nil
+        initialMedia = nil
     }
 }
 
