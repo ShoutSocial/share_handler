@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data' show Uint8List, Int32List, Int64List, Float64List;
 
 import 'package:flutter/foundation.dart' show WriteBuffer, ReadBuffer;
 import 'package:flutter/services.dart';
@@ -158,11 +157,11 @@ class ShareHandlerApi {
     }
   }
 
-  Future<void> recordSentMessage(SharedMedia arg_media) async {
+  Future<void> recordSentMessage(SharedMedia argMedia) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.ShareHandlerApi.recordSentMessage', codec,
         binaryMessenger: _binaryMessenger);
-    final Map<Object?, Object?>? replyMap = await channel.send(<Object?>[arg_media]) as Map<Object?, Object?>?;
+    final Map<Object?, Object?>? replyMap = await channel.send(<Object?>[argMedia]) as Map<Object?, Object?>?;
     if (replyMap == null) {
       throw PlatformException(
         code: 'channel-error',
