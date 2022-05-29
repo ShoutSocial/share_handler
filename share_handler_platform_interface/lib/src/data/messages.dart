@@ -151,6 +151,10 @@ class ShareHandlerApi {
         details: error['details'],
       );
     } else if (replyMap['result'] != null) {
+      if (replyMap['result'] is SharedMedia) {
+        return replyMap['result'] as SharedMedia;
+      }
+
       return SharedMedia.decode(replyMap['result']!);
     } else {
       return null;
