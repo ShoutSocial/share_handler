@@ -1,3 +1,5 @@
+# 0.0.5
+Added support for handling airdropped files
 # 0.0.4
 Fix for channel sometimes receiving full SharedMedia object rather than map
 # 0.0.3

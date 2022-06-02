@@ -27,11 +27,31 @@ First, add `share_handler` as a [dependency in your pubspec.yaml file](https://f
             <string>ShareMedia-$(PRODUCT_BUNDLE_IDENTIFIER)</string>
         </array>
     </dict>
-    <dict/>
 </array>
 
 <key>NSPhotoLibraryUsageDescription</key>
 <string>Photos can be shared to and used in this app</string>
+
+<!-- Optional: Add/Customize for AirDrop support -->
+<key>CFBundleDocumentTypes</key>
+<array>
+    <dict>
+        <key>CFBundleTypeName</key>
+        <string>ShareHandler</string>
+        <key>LSHandlerRank</key>
+        <string>Alternate</string>
+        <key>LSItemContentTypes</key>
+        <array>
+            <string>public.file-url</string>
+            <string>public.image</string>
+            <string>public.text</string>
+            <string>public.movie</string>
+            <string>public.url</string>
+            <string>public.data</string>
+        </array>
+    </dict>
+</array>
+
 <!-- Add for share_handler end -->
 ```
 
