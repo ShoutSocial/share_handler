@@ -51,7 +51,7 @@ public class SwiftShareHandlerIosPlatform: NSObject, FlutterPlugin, FlutterStrea
     // - found the issue while developing multiple applications using this library, after "application(_:open:options:)" is called, the first app using this librabry (first app by bundle id alphabetically) is opened
     public func hasMatchingSchemePrefix(url: URL?) -> Bool {
         if let url = url, let appDomain = Bundle.main.bundleIdentifier {
-            return url.absoluteString.hasPrefix("\(self.customSchemePrefix)-\(appDomain)")
+            return url.absoluteString.hasPrefix("\(self.customSchemePrefix)-\(appDomain)") || url.absoluteString.hasPrefix("file://")
         }
         return false
     }
@@ -116,26 +116,33 @@ public class SwiftShareHandlerIosPlatform: NSObject, FlutterPlugin, FlutterStrea
 //            let appDomain = Bundle.main.bundleIdentifier!
             let appGroupId = (Bundle.main.object(forInfoDictionaryKey: "AppGroupId") as? String) ?? "group.\(Bundle.main.bundleIdentifier!)"
             let userDefaults = UserDefaults(suiteName: appGroupId)
+            
+            var sharedMedia: SharedMedia?
 
             let params = url.queryDictionary
             if let sharedPreferencesKey = params?["key"] {
                 if let data = userDefaults?.object(forKey: sharedPreferencesKey) as? Data {
-                    
-                    if let sharedMedia = try? JSONDecoder().decode(SharedMedia.self, from: data) {
-                        sharedMedia.attachments?.forEach {$0.path = getAbsolutePath(for: $0.path) ?? $0.path}
-                        latestMedia = sharedMedia
-                        if (setInitialData) {
-                            initialMedia = sharedMedia
-                        }
-                        let map = sharedMedia.toDictionary()
-                        eventSink?(map)
-                    }
-                    
-                    
-                    
-                    return true
+                    sharedMedia = try? JSONDecoder().decode(SharedMedia.self, from: data)
                 }
+            } else if url.absoluteString.hasPrefix("file://") {
+                sharedMedia = SharedMedia.init(attachments: [SharedAttachment.init(path: url.absoluteString, type: SharedAttachmentType.file)], conversationIdentifier: nil, content: nil, speakableGroupName: nil, serviceName: nil, senderIdentifier: nil, imageFilePath: nil)
             }
+            
+            if let media = sharedMedia {
+                media.attachments?.forEach {$0.path = getAbsolutePath(for: $0.path) ?? $0.path}
+                latestMedia = media
+                if (setInitialData) {
+                    initialMedia = media
+                }
+                let map = media.toDictionary()
+                eventSink?(map)
+                
+                return true
+            }
+            
+            
+            
+            
 
 //            if url.fragment == "media" {
 //                if let key = url.host?.components(separatedBy: "=").last,
