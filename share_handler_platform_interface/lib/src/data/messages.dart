@@ -16,6 +16,7 @@ class SharedAttachment {
     required this.type,
   });
 
+  /// The path to the file on device
   String path;
   SharedAttachmentType type;
 
@@ -47,13 +48,28 @@ class SharedMedia {
     this.imageFilePath,
   });
 
+  /// List of shared attachments (ex. images, videos, pdfs, etc.). Each attachment has an attachment type and a path to the file on the device.
   List<SharedAttachment?>? attachments;
+
+  /// iOS only: List of recipient identifiers from iOS intent.
   List<String?>? recipientIdentifiers;
+
+  /// The identifier of the conversation that content was shared to. This will come back if you use the 'recordSentMessage' method, and the user selects a specific conversation to share content to.
   String? conversationIdentifier;
+
+  /// Text content that was shared if any. Could be a url as well.
   String? content;
+
+  /// The name of the recipient the content was shared to if specified.
   String? speakableGroupName;
+
+  /// iOS only: The name of the service that sent the content.
   String? serviceName;
+
+  /// iOS only: The identifier of the sender that shared the content.
   String? senderIdentifier;
+
+  /// iOS only: The file path for the image of the sender.
   String? imageFilePath;
 
   Object encode() {
