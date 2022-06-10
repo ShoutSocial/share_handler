@@ -1,3 +1,6 @@
+# 0.0.6
+Fix to decode file paths in case of platform encoded paths
+Added documentation to model attributes
 # 0.0.5
 Added support for handling airdropped files
 # 0.0.4
