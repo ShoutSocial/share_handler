@@ -1,3 +1,5 @@
+# 0.0.8
+Fixes and updates for README
 # 0.0.7
 Fixes and updates for README
 # 0.0.6
