@@ -33,6 +33,8 @@ First, add `share_handler` as a [dependency in your pubspec.yaml file](https://f
 <string>Photos can be shared to and used in this app</string>
 
 <!-- Optional: Add/Customize for AirDrop support -->
+<key>LSSupportsOpeningDocumentsInPlace</key>
+<string>No</string>
 <key>CFBundleDocumentTypes</key>
 <array>
     <dict>
@@ -65,56 +67,54 @@ First, add `share_handler` as a [dependency in your pubspec.yaml file](https://f
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<!-- Add if you want custom group id rather than default. Set it in Build Settings -> User-Defined -->
-	<key>AppGroupId</key>
+    <!-- Add if you want custom group id rather than default. Set it in Build Settings -> User-Defined -->
+    <key>AppGroupId</key>
     <string>$(CUSTOM_GROUP_ID)</string>
-
-	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
-	<key>NSExtension</key>
-	<dict>
-		<key>NSExtensionAttributes</key>
-		<dict>
-			<!-- Add supported message intent if you support sharing to a specific conversation - start -->
-			<key>IntentsSupported</key>
-			<array>
-				<string>INSendMessageIntent</string>
-			</array>
-			<!-- Add supported message intent if you support sharing to a specific conversation (registered via the recordSentMessage api call) - end -->
-			<key>NSExtensionActivationRule</key>
-			<!-- Comment or delete the TRUEPREDICATE NSExtensionActivationRule that only works in development mode -->
-			<!-- <string>TRUEPREDICATE</string> -->
-			<!-- Add a new NSExtensionActivationRule. The rule below will allow sharing one or more file of any type, url, or text content, You can modify these rules to your liking for which types of share content, as well as how many your app can handle -->
-			<string>SUBQUERY (
-					extensionItems,
-					$extensionItem,
-					SUBQUERY (
-								$extensionItem.attachments,
-								$attachment,
-										(
-											ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.file-url"
-										|| ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.image"
-										|| ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.text"
-										|| ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.movie"
-										|| ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.url"
-										)
-									).@count > 0
-							).@count > 0
-			</string>
-			<key>PHSupportedMediaTypes</key>
-			<array>
-				<string></string>
-				<string>Video</string>
-				<string>Image</string>
-			</array>
-		</dict>
-		<key>NSExtensionMainStoryboard</key>
-		<string>MainInterface</string>
-		<key>NSExtensionPointIdentifier</key>
-		<string>com.apple.share-services</string>
-	</dict>
+    <key>CFBundleVersion</key>
+    <string>$(FLUTTER_BUILD_NUMBER)</string>
+    <key>NSExtension</key>
+    <dict>
+        <key>NSExtensionAttributes</key>
+        <dict>
+            <!-- Add supported message intent if you support sharing to a specific conversation - start -->
+            <key>IntentsSupported</key>
+            <array>
+                <string>INSendMessageIntent</string>
+            </array>
+            <!-- Add supported message intent if you support sharing to a specific conversation (registered via the recordSentMessage api call) - end -->
+            <key>NSExtensionActivationRule</key>
+            <!-- Comment or delete the TRUEPREDICATE NSExtensionActivationRule that only works in development mode -->
+            <!-- <string>TRUEPREDICATE</string> -->
+            <!-- Add a new NSExtensionActivationRule. The rule below will allow sharing one or more file of any type, url, or text content, You can modify these rules to your liking for which types of share content, as well as how many your app can handle -->
+            <string>SUBQUERY (
+                extensionItems,
+                $extensionItem,
+                SUBQUERY (
+                    $extensionItem.attachments,
+                    $attachment,
+                    (
+                        ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.file-url"
+                        || ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.image"
+                        || ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.text"
+                        || ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.movie"
+                        || ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.url"
+                    )
+                ).@count > 0
+            ).@count > 0
+	    </string>
+	    <key>PHSupportedMediaTypes</key>
+	    <array>
+	        <string>Video</string>
+	        <string>Image</string>
+	    </array>
+        </dict>
+        <key>NSExtensionMainStoryboard</key>
+        <string>MainInterface</string>
+        <key>NSExtensionPointIdentifier</key>
+        <string>com.apple.share-services</string>
+    </dict>
 </dict>
-</plist>
+</plist> 
 ```
 
 4. Add a group identifier to both the Runner and ShareExtension Targets
@@ -136,7 +136,7 @@ target 'Runner' do
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 
   # share_handler addition start
-  target 'Share Extension' do
+  target 'ShareExtension' do
     inherit! :search_paths
     pod "share_handler_ios_models", :path => ".symlinks/plugins/share_handler_ios/ios/Models"
   end
@@ -609,8 +609,8 @@ class _MyAppState extends State<MyApp> {
               const SizedBox(height: 10),
               Text("Shared files: ${media?.attachments?.length}"),
               ...(media?.attachments ?? []).map((attachment) {
-                final _path = attachment?.path;
-                if (_path != null && attachment?.type == SharedAttachmentType.image) {
+                final path = attachment?.path;
+                if (path != null && attachment?.type == SharedAttachmentType.image) {
                   return Column(
                     children: [
                       ElevatedButton(
@@ -618,14 +618,14 @@ class _MyAppState extends State<MyApp> {
                           ShareHandlerPlatform.instance.recordSentMessage(
                             conversationIdentifier: "custom-conversation-identifier",
                             conversationName: "John Doe",
-                            conversationImage: File(_path),
+                            conversationImageFilePath: path,
                             serviceName: "custom-service-name",
                           );
                         },
                         child: const Text("Record message"),
                       ),
                       const SizedBox(height: 10),
-                      Image.file(File(_path)),
+                      Image.file(File(path)),
                     ],
                   );
                 } else {
