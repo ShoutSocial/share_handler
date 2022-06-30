@@ -1,3 +1,5 @@
+# 0.0.7
+Fixes and updates for README
 # 0.0.6
 Fix to decode file paths in case of platform encoded paths
 Added documentation to model attributes
