@@ -609,8 +609,8 @@ class _MyAppState extends State<MyApp> {
               const SizedBox(height: 10),
               Text("Shared files: ${media?.attachments?.length}"),
               ...(media?.attachments ?? []).map((attachment) {
-                final _path = attachment?.path;
-                if (_path != null && attachment?.type == SharedAttachmentType.image) {
+                final path = attachment?.path;
+                if (path != null && attachment?.type == SharedAttachmentType.image) {
                   return Column(
                     children: [
                       ElevatedButton(
@@ -618,14 +618,14 @@ class _MyAppState extends State<MyApp> {
                           ShareHandlerPlatform.instance.recordSentMessage(
                             conversationIdentifier: "custom-conversation-identifier",
                             conversationName: "John Doe",
-                            conversationImage: File(_path),
+                            conversationImageFilePath: path,
                             serviceName: "custom-service-name",
                           );
                         },
                         child: const Text("Record message"),
                       ),
                       const SizedBox(height: 10),
-                      Image.file(File(_path)),
+                      Image.file(File(path)),
                     ],
                   );
                 } else {
