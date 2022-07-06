@@ -4,10 +4,8 @@ import MobileCoreServices
 import Photos
 import Intents
 import share_handler_ios_models
-
-
+    
 class ShareViewController: SLComposeServiceViewController {
-    // TODO: IMPORTANT: This should be your host app bundle identifier
     static var hostAppBundleIdentifier = ""
     static var appGroupId = ""
     let sharedKey = "ShareKey"
@@ -17,6 +15,7 @@ class ShareViewController: SLComposeServiceViewController {
     let textContentType = UTType.text.identifier
     let urlContentType = UTType.url.identifier
     let fileURLType = UTType.fileURL.identifier
+    let dataContentType = UTType.data.identifier
     var sharedAttachments: [SharedAttachment] = []
     lazy var userDefaults: UserDefaults = {
         return UserDefaults(suiteName: ShareViewController.appGroupId)!
@@ -33,7 +32,7 @@ class ShareViewController: SLComposeServiceViewController {
 
 
             // convert ShareExtension id to host app id
-            // By default it is everything before the last "."
+            // By default it is remove last part of id after last point
             // For example: com.test.ShareExtension -> com.test
             let lastIndexOfPoint = shareExtensionAppBundleIdentifier.lastIndex(of: ".");
         ShareViewController.hostAppBundleIdentifier = String(shareExtensionAppBundleIdentifier[..<lastIndexOfPoint!]);
@@ -51,8 +50,6 @@ class ShareViewController: SLComposeServiceViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-        // This is called after the user selects Post. Do the upload of contentText and/or NSExtensionContext attachments.
         Task {
             await handleInputItems()
         }
@@ -73,6 +70,8 @@ class ShareViewController: SLComposeServiceViewController {
                             try await handleUrl(content: content, attachment: attachment, index: index)
                         } else if attachment.hasItemConformingToTypeIdentifier(textContentType) {
                             try await handleText(content: content, attachment: attachment, index: index)
+                        } else if attachment.hasItemConformingToTypeIdentifier(dataContentType) {
+                            try await handleData(content: content, attachment: attachment, index: index)
                         } else {
                             print("Attachment not handled with registered type identifiers: \(attachment.registeredTypeIdentifiers)")
                         }
@@ -91,7 +90,6 @@ class ShareViewController: SLComposeServiceViewController {
     }
     
     override func configurationItems() -> [Any]! {
-        // To add configuration options via table cells at the bottom of the sheet, return an array of SLComposeSheetConfigurationItem here.
         return []
     }
     
@@ -210,6 +208,24 @@ class ShareViewController: SLComposeServiceViewController {
         
     }
     
+    private func handleData (content: NSExtensionItem, attachment: NSItemProvider, index: Int) async throws {
+        let data = try await attachment.loadItem(forTypeIdentifier: dataContentType, options: nil)
+         
+        if let url = data as? URL {
+            
+            // Always copy
+            let fileName = getFileName(from :url, type: .file)
+            let newFileUrl = getNewFileUrl(fileName: fileName)
+            let copied = copyFile(at: url, to: newFileUrl)
+            if (copied) {
+                sharedAttachments.append(SharedAttachment.init(path:  newFileUrl.absoluteString, type: .file))
+            }
+        } else {
+            dismissWithError()
+        }
+        
+    }
+    
     private func dismissWithError() {
         print("[ERROR] Error loading data!")
         let alert = UIAlertController(title: "Error", message: "Error loading data", preferredStyle: .alert)
@@ -233,9 +249,6 @@ class ShareViewController: SLComposeServiceViewController {
         let intent = self.extensionContext?.intent as? INSendMessageIntent
         
         let conversationIdentifier = intent?.conversationIdentifier
-//        let content = intent?.content
-//        let outgoingMessageType = intent?.outgoingMessageType //INOutgoingMessageType.unknown/text/audio
-//        let recipients = intent?.recipients
         let sender = intent?.sender
         let serviceName = intent?.serviceName
         let speakableGroupName = intent?.speakableGroupName
@@ -306,46 +319,4 @@ class ShareViewController: SLComposeServiceViewController {
         }
         return true
     }
-    
-    //    private func getSharedMediaFile(forVideo: URL) -> SharedMediaFile? {
-    //        let asset = AVAsset(url: forVideo)
-    //        let duration = (CMTimeGetSeconds(asset.duration) * 1000).rounded()
-    //        let thumbnailPath = getThumbnailPath(for: forVideo)
-    //
-    //        if FileManager.default.fileExists(atPath: thumbnailPath.path) {
-    //            return SharedMediaFile(path: forVideo.absoluteString, thumbnail: thumbnailPath.absoluteString, duration: duration, type: .video)
-    //        }
-    //
-    //        var saved = false
-    //        let assetImgGenerate = AVAssetImageGenerator(asset: asset)
-    //        assetImgGenerate.appliesPreferredTrackTransform = true
-    //        //        let scale = UIScreen.main.scale
-    //        assetImgGenerate.maximumSize =  CGSize(width: 360, height: 360)
-    //        do {
-    //            let img = try assetImgGenerate.copyCGImage(at: CMTimeMakeWithSeconds(600, preferredTimescale: Int32(1.0)), actualTime: nil)
-    //            try UIImage.pngData(UIImage(cgImage: img))()?.write(to: thumbnailPath)
-    //            saved = true
-    //        } catch {
-    //            saved = false
-    //        }
-    //
-    //        return saved ? SharedMediaFile(path: forVideo.absoluteString, thumbnail: thumbnailPath.absoluteString, duration: duration, type: .video) : nil
-    //
-    //    }
-    
-    //    private func getThumbnailPath(for url: URL) -> URL {
-    //        let fileName = Data(url.lastPathComponent.utf8).base64EncodedString().replacingOccurrences(of: "==", with: "")
-    //        let path = FileManager.default
-    //            .containerURL(forSecurityApplicationGroupIdentifier: "group.\(hostAppBundleIdentifier)")!
-    //            .appendingPathComponent("\(fileName).jpg")
-    //        return path
-    //    }
-    
-    
 }
-
-//extension Array {
-//    subscript (safe index: UInt) -> Element? {
-//        return Int(index) < count ? self[Int(index)] : nil
-//    }
-//}
