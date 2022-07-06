@@ -1,3 +1,5 @@
+# 0.0.10
+Update example to use the latest README instructions
 # 0.0.9
 Fix for sharing file from safari. Updated readme accordingly.
 # 0.0.8
