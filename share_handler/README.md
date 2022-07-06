@@ -8,6 +8,8 @@ First, add `share_handler` as a [dependency in your pubspec.yaml file](https://f
 
 ### iOS
 
+****Note - Currently does not work on iOS Simulators. Test on a physical device*** 
+
 1. Add the following to `<project root>/ios/Runner/Info.plist`. It registers your app to open via a deep link that will be launched from the Share Extension. Also, for sharing photos, you will need access to the photo library.
 
 ```xml
@@ -153,7 +155,7 @@ import MobileCoreServices
 import Photos
 import Intents
 import share_handler_ios_models
-
+    
 class ShareViewController: SLComposeServiceViewController {
     static var hostAppBundleIdentifier = ""
     static var appGroupId = ""
@@ -164,16 +166,17 @@ class ShareViewController: SLComposeServiceViewController {
     let textContentType = UTType.text.identifier
     let urlContentType = UTType.url.identifier
     let fileURLType = UTType.fileURL.identifier
+    let dataContentType = UTType.data.identifier
     var sharedAttachments: [SharedAttachment] = []
     lazy var userDefaults: UserDefaults = {
         return UserDefaults(suiteName: ShareViewController.appGroupId)!
     }()
-
-
+    
+    
     override func isContentValid() -> Bool {
         return true
     }
-
+    
     private func loadIds() {
             // loading Share extension App Id
             let shareExtensionAppBundleIdentifier = Bundle.main.bundleIdentifier!;
@@ -188,21 +191,21 @@ class ShareViewController: SLComposeServiceViewController {
             // loading custom AppGroupId from Build Settings or use group.<hostAppBundleIdentifier>
         ShareViewController.appGroupId = (Bundle.main.object(forInfoDictionaryKey: "AppGroupId") as? String) ?? "group.\(ShareViewController.hostAppBundleIdentifier)";
         }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad();
-
+        
         // load group and app id from build info
                 loadIds();
     }
-
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         Task {
             await handleInputItems()
         }
     }
-
+    
     func handleInputItems() async {
         if let content = extensionContext!.inputItems[0] as? NSExtensionItem {
             if let contents = content.attachments {
@@ -218,59 +221,61 @@ class ShareViewController: SLComposeServiceViewController {
                             try await handleUrl(content: content, attachment: attachment, index: index)
                         } else if attachment.hasItemConformingToTypeIdentifier(textContentType) {
                             try await handleText(content: content, attachment: attachment, index: index)
+                        } else if attachment.hasItemConformingToTypeIdentifier(dataContentType) {
+                            try await handleData(content: content, attachment: attachment, index: index)
                         } else {
                             print("Attachment not handled with registered type identifiers: \(attachment.registeredTypeIdentifiers)")
                         }
                     } catch {
                         self.dismissWithError()
                     }
-
+                    
                 }
             }
             redirectToHostApp()
         }
     }
-
+    
     override func didSelectPost() {
         print("didSelectPost");
     }
-
+    
     override func configurationItems() -> [Any]! {
         return []
     }
-
+    
     private func getNewFileUrl(fileName: String) -> URL {
         let newFileUrl = FileManager.default
             .containerURL(forSecurityApplicationGroupIdentifier: ShareViewController.appGroupId)!
             .appendingPathComponent(fileName)
         return newFileUrl
     }
-
+    
     private func handleText (content: NSExtensionItem, attachment: NSItemProvider, index: Int) async throws {
         let data = try await attachment.loadItem(forTypeIdentifier: textContentType, options: nil)
-
+        
         if let item = data as? String {
             sharedText.append(item)
         } else {
             dismissWithError()
         }
-
+        
     }
-
+    
     private func handleUrl (content: NSExtensionItem, attachment: NSItemProvider, index: Int) async throws {
         let data = try await attachment.loadItem(forTypeIdentifier: urlContentType, options: nil)
-
+        
             if let item = data as? URL {
                 sharedText.append(item.absoluteString)
             } else {
                 dismissWithError()
             }
-
+        
     }
-
+    
     private func handleImages (content: NSExtensionItem, attachment: NSItemProvider, index: Int) async throws {
         let data = try await attachment.loadItem(forTypeIdentifier: imageContentType, options: nil)
-
+            
         var fileName: String?
         var imageData: Data?
         var sourceUrl: URL?
@@ -284,7 +289,7 @@ class ShareViewController: SLComposeServiceViewController {
             fileName = UUID().uuidString + ".png"
             imageData = image.pngData()
         }
-
+        
         if let _fileName = fileName {
             let newFileUrl = getNewFileUrl(fileName: _fileName)
             do {
@@ -294,35 +299,35 @@ class ShareViewController: SLComposeServiceViewController {
             } catch {
                 print("Error removing item")
             }
-
-
+            
+            
             var copied: Bool = false
             if let _data = imageData {
                 copied = FileManager.default.createFile(atPath: newFileUrl.path, contents: _data)
             } else if let _sourceUrl = sourceUrl {
                 copied = copyFile(at: _sourceUrl, to: newFileUrl)
             }
-
+            
             if (copied) {
                 sharedAttachments.append(SharedAttachment.init(path:  newFileUrl.absoluteString, type: .image))
             } else {
                 dismissWithError()
                 return
             }
-
+            
         } else {
             dismissWithError()
             return
         }
-
+        
     }
-
+    
     private func handleVideos (content: NSExtensionItem, attachment: NSItemProvider, index: Int) async throws {
         let data = try await attachment.loadItem(forTypeIdentifier: movieContentType, options: nil)
-
-
+         
+            
         if let url = data as? URL {
-
+            
             // Always copy
             let fileName = getFileName(from: url, type: .video)
             let newFileUrl = getNewFileUrl(fileName: fileName)
@@ -333,14 +338,14 @@ class ShareViewController: SLComposeServiceViewController {
         } else {
             dismissWithError()
         }
-
+        
     }
-
+    
     private func handleFiles (content: NSExtensionItem, attachment: NSItemProvider, index: Int) async throws {
         let data = try await attachment.loadItem(forTypeIdentifier: fileURLType, options: nil)
-
+         
         if let url = data as? URL {
-
+            
             // Always copy
             let fileName = getFileName(from :url, type: .file)
             let newFileUrl = getNewFileUrl(fileName: fileName)
@@ -351,43 +356,61 @@ class ShareViewController: SLComposeServiceViewController {
         } else {
             dismissWithError()
         }
-
+        
     }
-
+    
+    private func handleData (content: NSExtensionItem, attachment: NSItemProvider, index: Int) async throws {
+        let data = try await attachment.loadItem(forTypeIdentifier: dataContentType, options: nil)
+         
+        if let url = data as? URL {
+            
+            // Always copy
+            let fileName = getFileName(from :url, type: .file)
+            let newFileUrl = getNewFileUrl(fileName: fileName)
+            let copied = copyFile(at: url, to: newFileUrl)
+            if (copied) {
+                sharedAttachments.append(SharedAttachment.init(path:  newFileUrl.absoluteString, type: .file))
+            }
+        } else {
+            dismissWithError()
+        }
+        
+    }
+    
     private func dismissWithError() {
         print("[ERROR] Error loading data!")
         let alert = UIAlertController(title: "Error", message: "Error loading data", preferredStyle: .alert)
-
+        
         let action = UIAlertAction(title: "Error", style: .cancel) { _ in
             self.dismiss(animated: true, completion: nil)
         }
-
+        
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
         extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
     }
-
+    
     private func redirectToHostApp() {
         // ids may not loaded yet so we need loadIds here too
         loadIds();
         let url = URL(string: "ShareMedia-\(ShareViewController.hostAppBundleIdentifier)://\(ShareViewController.hostAppBundleIdentifier)?key=\(sharedKey)")
         var responder = self as UIResponder?
         let selectorOpenURL = sel_registerName("openURL:")
-
+        
         let intent = self.extensionContext?.intent as? INSendMessageIntent
-
+        
         let conversationIdentifier = intent?.conversationIdentifier
         let sender = intent?.sender
         let serviceName = intent?.serviceName
         let speakableGroupName = intent?.speakableGroupName
-
+        
         let sharedMedia = SharedMedia.init(attachments: sharedAttachments, conversationIdentifier: conversationIdentifier, content: sharedText.joined(separator: "\n"), speakableGroupName: speakableGroupName?.spokenPhrase, serviceName: serviceName, senderIdentifier: sender?.contactIdentifier ?? sender?.customIdentifier, imageFilePath: nil)
-
+        
         let json = sharedMedia.toJson()
-
+        
         userDefaults.set(json, forKey: sharedKey)
         userDefaults.synchronize()
-
+        
         while (responder != nil) {
             if (responder?.responds(to: selectorOpenURL))! {
                 let _ = responder?.perform(selectorOpenURL, with: url)
@@ -396,20 +419,20 @@ class ShareViewController: SLComposeServiceViewController {
         }
         extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
     }
-
+    
     enum RedirectType {
         case media
         case text
         case file
     }
-
+    
     func getExtension(from url: URL, type: SharedAttachmentType) -> String {
         let parts = url.lastPathComponent.components(separatedBy: ".")
         var ex: String? = nil
         if (parts.count > 1) {
             ex = parts.last
         }
-
+        
         if (ex == nil) {
             switch type {
             case .image:
@@ -424,17 +447,17 @@ class ShareViewController: SLComposeServiceViewController {
         }
         return ex ?? "Unknown"
     }
-
+    
     func getFileName(from url: URL, type: SharedAttachmentType) -> String {
         var name = url.lastPathComponent
-
+        
         if (name.isEmpty) {
             name = UUID().uuidString + "." + getExtension(from: url, type: type)
         }
-
+        
         return name
     }
-
+    
     func copyFile(at srcURL: URL, to dstURL: URL) -> Bool {
         do {
             if FileManager.default.fileExists(atPath: dstURL.path) {

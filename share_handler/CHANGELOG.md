@@ -1,3 +1,5 @@
+# 0.0.9
+Fix for sharing file from safari. Updated readme accordingly.
 # 0.0.8
 Fixes and updates for README
 # 0.0.7
