@@ -1,7 +1,7 @@
 name: share_handler
 description: A Flutter plugin to handle incoming shared text/media, as well as add share to suggestions/shortcuts.
 repository: https://github.com/AboutShout/share_handler/tree/main/share_handler
-version: 0.0.11
+version: 0.0.12
 
 environment:
   sdk: ">=2.14.0 <3.0.0"
@@ -29,9 +29,9 @@ dependencies:
   share_handler_android: ^0.0.6
   # share_handler_android:
   #   path: ../share_handler_android
-  # share_handler_ios: ^0.0.6
-  share_handler_ios:
-    path: ../share_handler_ios
+  share_handler_ios: ^0.0.7
+  # share_handler_ios:
+  #   path: ../share_handler_ios
   # share_handler_linux:
   #   path: ../share_handler_linux 
   # share_handler_macos:

@@ -1,3 +1,5 @@
+# 0.0.12
+Put inheritable view controller into sub pod library so the ShareViewController can simply inherit it, rather than copy in code. Adjusted README accordingly.
 # 0.0.11
 Fix for receiving shared .txt files on Android
 # 0.0.10
