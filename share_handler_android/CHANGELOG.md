@@ -1,3 +1,5 @@
+# 0.0.6
+Fix for receiving shared .txt files
 # 0.0.5
 Fix to decode file paths in case of platform encoded paths
 Added documentation to model attributes

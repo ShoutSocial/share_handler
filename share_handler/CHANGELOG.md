@@ -1,3 +1,5 @@
+# 0.0.11
+Fix for receiving shared .txt files on Android
 # 0.0.10
 Update example to use the latest README instructions
 # 0.0.9
