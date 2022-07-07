@@ -1,3 +1,5 @@
+# 0.0.7
+Put inheritable view controller into sub pod library so the ShareViewController can simply inherit it, rather than copy in code
 # 0.0.6
 Fix to decode file paths in case of platform encoded paths
 Added documentation to model attributes
