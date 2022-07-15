@@ -7,6 +7,7 @@
 
 import Foundation
 import Flutter
+import share_handler_ios_models
 
 private func wrapResult(_ result: Any?, _ error: FlutterError?) -> [String : Any?]? {
     var errorDict: [String : Any]?

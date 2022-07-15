@@ -5,9 +5,9 @@ public enum SharedAttachmentType: Int, Codable {
     case file
 }
 
-public class SharedAttachment: Codable {
-    var path: String
-    var type: SharedAttachmentType
+open class SharedAttachment: Codable {
+    public var path: String
+    public var type: SharedAttachmentType
     
     public init(path: String, type: SharedAttachmentType) {
         self.path = path
@@ -18,7 +18,7 @@ public class SharedAttachment: Codable {
         return ["path": path, "type": type.rawValue]
     }
     
-    class func fromMap(map: Dictionary<String, Any?>?) -> SharedAttachment? {
+    public class func fromMap(map: Dictionary<String, Any?>?) -> SharedAttachment? {
         if let _map = map {
             return SharedAttachment.init(path: _map["path"] as! String, type: SharedAttachmentType.init(rawValue: _map["type"] as! Int)!)
         } else {
@@ -27,15 +27,15 @@ public class SharedAttachment: Codable {
     }
 }
 
-public class SharedMedia: Codable {
-    var attachments: [SharedAttachment]?
-    var conversationIdentifier: String?
-    var content: String?
-    var speakableGroupName: String?
-    var serviceName: String?
-    var senderIdentifier: String?
-    var imageFilePath: String?
-    
+open class SharedMedia: Codable {
+    public var attachments: [SharedAttachment]?
+    public var conversationIdentifier: String?
+    public var content: String?
+    public var speakableGroupName: String?
+    public var serviceName: String?
+    public var senderIdentifier: String?
+    public var imageFilePath: String?
+
     public init(attachments: [SharedAttachment]?, conversationIdentifier: String?, content: String?, speakableGroupName: String?, serviceName: String?, senderIdentifier: String?, imageFilePath: String?) {
         self.attachments = attachments
         self.conversationIdentifier = conversationIdentifier
@@ -46,7 +46,7 @@ public class SharedMedia: Codable {
         self.imageFilePath = imageFilePath
     }
     
-    class func fromMap(map: Dictionary<String, Any?>?) -> SharedMedia? {
+    public class func fromMap(map: Dictionary<String, Any?>?) -> SharedMedia? {
         if let _map = map {
             return SharedMedia(attachments: (_map["attachments"] as? Array<Dictionary<String,Any>>)?.compactMap{ SharedAttachment.fromMap(map: $0)}, conversationIdentifier: _map["conversationIdentifier"] as? String, content: _map["content"] as? String, speakableGroupName: _map["speakableGroupName"] as? String, serviceName: _map["serviceName"]as? String, senderIdentifier: _map["senderIdentifier"] as? String, imageFilePath: _map["imageFilePath"] as? String)
         } else {
@@ -54,7 +54,7 @@ public class SharedMedia: Codable {
         }
     }
     
-    class func fromJson(data: Data?) -> SharedMedia? {
+    public class func fromJson(data: Data?) -> SharedMedia? {
         if let _json = data {
             let map = try? JSONSerialization.jsonObject(with: _json) as? Dictionary<String,Any>
             if let _map = map {

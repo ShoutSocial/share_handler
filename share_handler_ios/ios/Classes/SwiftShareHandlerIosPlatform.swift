@@ -2,6 +2,7 @@ import Flutter
 import UIKit
 import Photos
 import Intents
+import share_handler_ios_models
 
 public class SwiftShareHandlerIosPlatform: NSObject, FlutterPlugin, FlutterStreamHandler, ShareHandlerApi {
     

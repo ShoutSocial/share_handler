@@ -1,3 +1,5 @@
+# 0.0.8
+Setup podspecs and dependencies better
 # 0.0.7
 Put inheritable view controller into sub pod library so the ShareViewController can simply inherit it, rather than copy in code
 # 0.0.6

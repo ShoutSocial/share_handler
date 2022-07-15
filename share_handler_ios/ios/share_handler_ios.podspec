@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'share_handler_ios'
-  s.version          = '0.0.1'
+  s.version          = '0.0.8'
   s.summary          = 'iOS implementation of the share_handler plugin.'
   s.description      = <<-DESC
   iOS implementation of the share_handler plugin.
@@ -13,9 +13,10 @@ Pod::Spec.new do |s|
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Your Company' => 'email@example.com' }
   s.source           = { :path => '.' }
-  s.source_files = '**/*'
-  s.public_header_files = '**/*.h'
+  s.source_files = 'Classes/**/*'
+  s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
+  s.dependency 'share_handler_ios_models'
   s.subspec 'share_handler_ios_models' do |ss|
     ss.source_files = './Models/Classes/**/*'
     ss.public_header_files = './Models/Classes/**/*.h'
