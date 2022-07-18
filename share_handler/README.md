@@ -17,6 +17,11 @@ First, add `share_handler` as a [dependency in your pubspec.yaml file](https://f
 <array>
     <string>INSendMessageIntent</string>
 </array>
+
+<!-- Uncomment below lines if you want to use a custom group id rather than the default. Set it in Build Settings -> User-Defined -->
+<!-- <key>AppGroupId</key>
+<string>$(CUSTOM_GROUP_ID)</string> -->
+
 <key>CFBundleURLTypes</key>
 <array>
     <dict>
@@ -67,9 +72,10 @@ First, add `share_handler` as a [dependency in your pubspec.yaml file](https://f
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <!-- Add if you want custom group id rather than default. Set it in Build Settings -> User-Defined -->
-    <key>AppGroupId</key>
-    <string>$(CUSTOM_GROUP_ID)</string>
+    <!-- Uncomment below lines if you want to use a custom group id rather than the default. Set it in Build Settings -> User-Defined -->
+    <!-- <key>AppGroupId</key>
+    <string>$(CUSTOM_GROUP_ID)</string> -->
+
     <key>CFBundleVersion</key>
     <string>$(FLUTTER_BUILD_NUMBER)</string>
     <key>NSExtension</key>

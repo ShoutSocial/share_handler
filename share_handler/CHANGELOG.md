@@ -1,3 +1,5 @@
+# 0.0.14
+Updated readme to comment out custom group id in info plists by default.
 # 0.0.13
 Setup podspecs and dependencies better for ios
 # 0.0.12
