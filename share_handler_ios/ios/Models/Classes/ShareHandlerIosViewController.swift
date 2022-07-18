@@ -34,7 +34,7 @@ open class ShareHandlerIosViewController: SLComposeServiceViewController {
         return true
     }
     
-    private func loadIds() {
+    public func loadIds() {
             // loading Share extension App Id
             let shareExtensionAppBundleIdentifier = Bundle.main.bundleIdentifier!;
 
@@ -101,14 +101,14 @@ open class ShareHandlerIosViewController: SLComposeServiceViewController {
         return []
     }
     
-    private func getNewFileUrl(fileName: String) -> URL {
+    public func getNewFileUrl(fileName: String) -> URL {
         let newFileUrl = FileManager.default
             .containerURL(forSecurityApplicationGroupIdentifier: ShareHandlerIosViewController.appGroupId)!
             .appendingPathComponent(fileName)
         return newFileUrl
     }
     
-    private func handleText (content: NSExtensionItem, attachment: NSItemProvider, index: Int) async throws {
+    public func handleText (content: NSExtensionItem, attachment: NSItemProvider, index: Int) async throws {
         let data = try await attachment.loadItem(forTypeIdentifier: textContentType, options: nil)
         
         if let item = data as? String {
@@ -119,7 +119,7 @@ open class ShareHandlerIosViewController: SLComposeServiceViewController {
         
     }
     
-    private func handleUrl (content: NSExtensionItem, attachment: NSItemProvider, index: Int) async throws {
+    public func handleUrl (content: NSExtensionItem, attachment: NSItemProvider, index: Int) async throws {
         let data = try await attachment.loadItem(forTypeIdentifier: urlContentType, options: nil)
         
             if let item = data as? URL {
@@ -130,7 +130,7 @@ open class ShareHandlerIosViewController: SLComposeServiceViewController {
         
     }
     
-    private func handleImages (content: NSExtensionItem, attachment: NSItemProvider, index: Int) async throws {
+    public func handleImages (content: NSExtensionItem, attachment: NSItemProvider, index: Int) async throws {
         let data = try await attachment.loadItem(forTypeIdentifier: imageContentType, options: nil)
             
         var fileName: String?
@@ -179,7 +179,7 @@ open class ShareHandlerIosViewController: SLComposeServiceViewController {
         
     }
     
-    private func handleVideos (content: NSExtensionItem, attachment: NSItemProvider, index: Int) async throws {
+    public func handleVideos (content: NSExtensionItem, attachment: NSItemProvider, index: Int) async throws {
         let data = try await attachment.loadItem(forTypeIdentifier: movieContentType, options: nil)
          
             
@@ -198,7 +198,7 @@ open class ShareHandlerIosViewController: SLComposeServiceViewController {
         
     }
     
-    private func handleFiles (content: NSExtensionItem, attachment: NSItemProvider, index: Int) async throws {
+    public func handleFiles (content: NSExtensionItem, attachment: NSItemProvider, index: Int) async throws {
         let data = try await attachment.loadItem(forTypeIdentifier: fileURLType, options: nil)
          
         if let url = data as? URL {
@@ -216,7 +216,7 @@ open class ShareHandlerIosViewController: SLComposeServiceViewController {
         
     }
     
-    private func handleData (content: NSExtensionItem, attachment: NSItemProvider, index: Int) async throws {
+    public func handleData (content: NSExtensionItem, attachment: NSItemProvider, index: Int) async throws {
         let data = try await attachment.loadItem(forTypeIdentifier: dataContentType, options: nil)
          
         if let url = data as? URL {
@@ -234,7 +234,7 @@ open class ShareHandlerIosViewController: SLComposeServiceViewController {
         
     }
     
-    private func dismissWithError() {
+    public func dismissWithError() {
         print("[ERROR] Error loading data!")
         let alert = UIAlertController(title: "Error", message: "Error loading data", preferredStyle: .alert)
         
@@ -247,7 +247,7 @@ open class ShareHandlerIosViewController: SLComposeServiceViewController {
         extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
     }
     
-    private func redirectToHostApp() {
+    public func redirectToHostApp() {
         // ids may not loaded yet so we need loadIds here too
         loadIds();
         let url = URL(string: "ShareMedia-\(ShareHandlerIosViewController.hostAppBundleIdentifier)://\(ShareHandlerIosViewController.hostAppBundleIdentifier)?key=\(sharedKey)")

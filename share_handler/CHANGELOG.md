@@ -1,3 +1,5 @@
+# 0.0.16
+Fix for non public methods in inherited viewcontroller for iOS
 # 0.0.15
 Updated Readme for custom group id for the runner target
 # 0.0.14

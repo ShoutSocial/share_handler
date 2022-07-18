@@ -1,3 +1,5 @@
+# 0.0.9
+Fix for non public methods in inherited viewcontroller
 # 0.0.8
 Setup podspecs and dependencies better
 # 0.0.7

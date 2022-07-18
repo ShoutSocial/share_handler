@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'share_handler_ios_models'
-  s.version          = '0.0.8'
+  s.version          = '0.0.9'
   s.summary          = 'Shared code for share_handler_ios plugin.'
   s.description      = <<-DESC
   Shared code for share_handler_ios plugin so main app and share extension targets can use it.
