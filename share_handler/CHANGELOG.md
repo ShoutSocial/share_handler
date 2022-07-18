@@ -1,3 +1,5 @@
+# 0.0.15
+Updated Readme for custom group id for the runner target
 # 0.0.14
 Updated readme to comment out custom group id in info plists by default.
 # 0.0.13

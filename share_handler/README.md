@@ -132,6 +132,7 @@ First, add `share_handler` as a [dependency in your pubspec.yaml file](https://f
    - Go to Targets -> ShareExtension -> Build Settings
    - Click the '+' icon and select 'Add User-Defined Setting'
    - Give it the key 'CUSTOM_GROUP_ID' and the value of the app group identifier that you gave to both targets in the previous step
+   - Repeat the above 2 steps for the 'Runner' target
 6. Add the following code inside `<project root>/ios/Podfile` within the `target 'Runner' do` block, and then run `pod install` inside of `<project root>/ios`.
 
 ```ruby
