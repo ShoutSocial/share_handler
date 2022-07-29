@@ -30,7 +30,7 @@ class SharedAttachment {
   static SharedAttachment decode(Object message) {
     final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
     return SharedAttachment(
-      path: Uri.decodeFull(pigeonMap['path']! as String),
+      path: Uri.decodeFull(Uri.parse(pigeonMap['path']! as String).path),
       type: SharedAttachmentType.values[pigeonMap['type']! as int],
     );
   }
