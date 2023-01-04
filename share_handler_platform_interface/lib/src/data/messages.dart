@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart' show WriteBuffer, ReadBuffer;
 import 'package:flutter/services.dart';
+import 'dart:io';
 
 enum SharedAttachmentType {
   image,
@@ -29,10 +30,18 @@ class SharedAttachment {
 
   static SharedAttachment decode(Object message) {
     final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
-    return SharedAttachment(
-      path: Uri.decodeFull(pigeonMap['path']! as String),
-      type: SharedAttachmentType.values[pigeonMap['type']! as int],
-    );
+    String path = pigeonMap['path']! as String;
+    if (Platform.isIOS) {
+      return SharedAttachment(
+        path: Uri.decodeFull(path),
+        type: SharedAttachmentType.values[pigeonMap['type']! as int],
+      );
+    } else {
+      return SharedAttachment(
+        path: path,
+        type: SharedAttachmentType.values[pigeonMap['type']! as int],
+      );
+    }
   }
 }
 
