@@ -89,7 +89,7 @@ object FileDirectory {
     private fun getDataColumn(context: Context, uri: Uri, selection: String?,
                               selectionArgs: Array<String>?): String? {
 
-        if (uri.authority != null) {
+        if (uri.authority != null && selection==null) {
             var cursor: Cursor? = null
             val column = "_display_name"
             val projection = arrayOf(column)
