@@ -1,3 +1,6 @@
+# 0.0.6
+Fix problem with special characters in filename
+Update to allow for newer dart sdk version
 # 0.0.5
 Fix to decode file paths in case of platform encoded paths
 Added documentation to model attributes
