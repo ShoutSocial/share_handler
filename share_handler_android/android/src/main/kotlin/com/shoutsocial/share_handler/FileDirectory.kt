@@ -89,7 +89,7 @@ object FileDirectory {
     private fun getDataColumn(context: Context, uri: Uri, selection: String?,
                               selectionArgs: Array<String>?): String? {
 
-        if (uri.authority != null) {
+        if (uri.authority != null && selection==null) {
             var cursor: Cursor? = null
             val column = "_display_name"
             val projection = arrayOf(column)
@@ -118,7 +118,7 @@ object FileDirectory {
                 val type = MimeTypeMap.getSingleton().getExtensionFromMimeType(mimeType)
                 targetFile = File(context.cacheDir, "${prefix}_${Date().time}.$type")
             }
-
+            val uri = selectionArgs?.let { args -> uri.buildUpon().appendPath(args.first()).build() } ?: uri
             context.contentResolver.openInputStream(uri)?.use { input ->
                 FileOutputStream(targetFile).use { fileOut ->
                     input.copyTo(fileOut)
