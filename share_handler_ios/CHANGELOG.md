@@ -1,3 +1,5 @@
+# 0.0.10
+Update to allow for newer dart sdk version
 # 0.0.9
 Fix for non public methods in inherited viewcontroller
 # 0.0.8
