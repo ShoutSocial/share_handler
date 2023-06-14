@@ -1,3 +1,7 @@
+# 0.0.17
+Fix problems receiving files on Android "Android/Files/Recent"
+Fix problem with special characters in filename
+Update to allow for newer dart sdk version
 # 0.0.16
 Fix for non public methods in inherited viewcontroller for iOS
 # 0.0.15
