@@ -1,3 +1,6 @@
+# 0.0.7
+Fix problems receiving files on Android "Android/Files/Recent"
+Update to allow for newer dart sdk version
 # 0.0.6
 Fix for receiving shared .txt files
 # 0.0.5
