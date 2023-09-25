@@ -10,6 +10,7 @@ import Social
 import MobileCoreServices
 import Photos
 import Intents
+import Contacts
 
 @available(iOS 14.0, *)
 @available(iOSApplicationExtension 14.0, *)
@@ -114,10 +115,22 @@ open class ShareHandlerIosViewController: SLComposeServiceViewController {
         if let item = data as? String {
             sharedText.append(item)
         } else {
-            dismissWithError()
+            if let d = data as? Data {
+                do{
+                    let contacts = try CNContactVCardSerialization.contacts(with: d)
+                    for contact in contacts {
+                        let data = try CNContactVCardSerialization.data(with: [contact])
+                        let str = String(data: data, encoding: .utf8)!
+                        sharedText.append(str)
+                    }
+                } catch {
+                    dismissWithError()
+                }
+            } else {
+                dismissWithError()
+            }
         }
-        
-    }
+    } 
     
     public func handleUrl (content: NSExtensionItem, attachment: NSItemProvider, index: Int) async throws {
         let data = try await attachment.loadItem(forTypeIdentifier: urlContentType, options: nil)
