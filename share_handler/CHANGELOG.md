@@ -1,3 +1,5 @@
+# 0.0.18
+Support handling a shared contact card (vcf) on iOS
 # 0.0.17
 Fix problems receiving files on Android "Android/Files/Recent"
 Fix problem with special characters in filename
