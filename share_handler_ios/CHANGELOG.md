@@ -1,3 +1,5 @@
+# 0.0.11
+Support handling a shared contact card (vcf)
 # 0.0.10
 Update to allow for newer dart sdk version
 # 0.0.9
