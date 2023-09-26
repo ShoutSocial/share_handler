@@ -14,7 +14,7 @@ import Contacts
 
 @available(iOS 14.0, *)
 @available(iOSApplicationExtension 14.0, *)
-open class ShareHandlerIosViewController: SLComposeServiceViewController {
+open class ShareHandlerIosViewController: UIViewController {
     static var hostAppBundleIdentifier = ""
     static var appGroupId = ""
     let sharedKey = "ShareKey"
@@ -29,11 +29,6 @@ open class ShareHandlerIosViewController: SLComposeServiceViewController {
     lazy var userDefaults: UserDefaults = {
         return UserDefaults(suiteName: ShareHandlerIosViewController.appGroupId)!
     }()
-    
-    
-    public override func isContentValid() -> Bool {
-        return true
-    }
     
     public func loadIds() {
             // loading Share extension App Id
@@ -55,13 +50,14 @@ open class ShareHandlerIosViewController: SLComposeServiceViewController {
         
         // load group and app id from build info
                 loadIds();
+        Task {
+            await handleInputItems()
+        }
     }
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        Task {
-            await handleInputItems()
-        }
+        extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
     }
     
     func handleInputItems() async {
@@ -92,14 +88,6 @@ open class ShareHandlerIosViewController: SLComposeServiceViewController {
             }
             redirectToHostApp()
         }
-    }
-    
-    public override func didSelectPost() {
-        print("didSelectPost");
-    }
-    
-    public override func configurationItems() -> [Any]! {
-        return []
     }
     
     public func getNewFileUrl(fileName: String) -> URL {
@@ -287,7 +275,6 @@ open class ShareHandlerIosViewController: SLComposeServiceViewController {
             }
             responder = responder!.next
         }
-        extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
     }
     
     enum RedirectType {

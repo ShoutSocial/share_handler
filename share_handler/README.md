@@ -151,7 +151,7 @@ target 'Runner' do
 end
 ```
 
-7. In Xcode, replace the contents of ShareExtension/ShareViewController.swift with the following code. The share extension doesn't launch a UI of its own, instead it serializes the shared content/media and saves it to the groups shared preferences, then opens a deep link into the full app so your flutter/dart code can then read the serialized data and handle it accordingly. Note that for a brief moment, a default share modal might show up before it redirects to the app (particularly noticeable when using a simulator).
+7. In Xcode, replace the contents of ShareExtension/ShareViewController.swift with the following code. The share extension doesn't launch a UI of its own, instead it serializes the shared content/media and saves it to the groups shared preferences, then opens a deep link into the full app so your flutter/dart code can then read the serialized data and handle it accordingly. 
 
 ```swift
 import share_handler_ios_models
