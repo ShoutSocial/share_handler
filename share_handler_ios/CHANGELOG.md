@@ -1,3 +1,5 @@
+# 0.0.12
+Don't show default share modal and go straight to redirect to flutter app 
 # 0.0.11
 Support handling a shared contact card (vcf)
 # 0.0.10

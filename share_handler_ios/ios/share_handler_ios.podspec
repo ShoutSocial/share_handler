@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'share_handler_ios'
-  s.version          = '0.0.10'
+  s.version          = '0.0.11'
   s.summary          = 'iOS implementation of the share_handler plugin.'
   s.description      = <<-DESC
   iOS implementation of the share_handler plugin.
