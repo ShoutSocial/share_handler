@@ -1,3 +1,5 @@
+# 0.0.19
+iOS - Don't show default share modal and go straight to redirect to flutter app 
 # 0.0.18
 Support handling a shared contact card (vcf) on iOS
 # 0.0.17
