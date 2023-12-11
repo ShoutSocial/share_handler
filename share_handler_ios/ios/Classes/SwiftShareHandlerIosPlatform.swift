@@ -7,11 +7,11 @@ import share_handler_ios_models
 public class SwiftShareHandlerIosPlatform: NSObject, FlutterPlugin, FlutterStreamHandler, ShareHandlerApi {
     
     
-//     public static func register(with registrar: FlutterPluginRegistrar) {
-//       let channel = FlutterMethodChannel(name: "share_handler_ios", binaryMessenger: registrar.messenger())
-//       let instance = SwiftShareHandlerPlugin()
-//       registrar.addMethodCallDelegate(instance, channel: channel)
-//     }
+    //     public static func register(with registrar: FlutterPluginRegistrar) {
+    //       let channel = FlutterMethodChannel(name: "share_handler_ios", binaryMessenger: registrar.messenger())
+    //       let instance = SwiftShareHandlerPlugin()
+    //       registrar.addMethodCallDelegate(instance, channel: channel)
+    //     }
 
     static let kEventsChannel = "com.shoutsocial.share_handler/sharedMediaStream"
 
@@ -114,7 +114,7 @@ public class SwiftShareHandlerIosPlatform: NSObject, FlutterPlugin, FlutterStrea
 
     private func handleUrl(url: URL?, setInitialData: Bool) -> Bool {
         if let url = url {
-//            let appDomain = Bundle.main.bundleIdentifier!
+            //            let appDomain = Bundle.main.bundleIdentifier!
             let appGroupId = (Bundle.main.object(forInfoDictionaryKey: "AppGroupId") as? String) ?? "group.\(Bundle.main.bundleIdentifier!)"
             let userDefaults = UserDefaults(suiteName: appGroupId)
             
@@ -140,67 +140,62 @@ public class SwiftShareHandlerIosPlatform: NSObject, FlutterPlugin, FlutterStrea
                 
                 return true
             }
-            
-            
-            
-            
-
-//            if url.fragment == "media" {
-//                if let key = url.host?.components(separatedBy: "=").last,
-//                   let json = userDefaults?.object(forKey: key) as? Data {
-//                    let sharedMedia = SharedMedia.fromMap(nil)
-//                    let sharedMediaFiles: [SharedMediaFile] = sharedArray.compactMap {
-//                        guard let path = getAbsolutePath(for: $0.path) else {
-//                            return nil
-//                        }
-//                        if ($0.type == .video && $0.thumbnail != nil) {
-//                            let thumbnail = getAbsolutePath(for: $0.thumbnail!)
-//                            return SharedMediaFile.init(path: path, thumbnail: thumbnail, duration: $0.duration, type: $0.type)
-//                        } else if ($0.type == .video && $0.thumbnail == nil) {
-//                            return SharedMediaFile.init(path: path, thumbnail: nil, duration: $0.duration, type: $0.type)
-//                        }
-//
-//                        return SharedMediaFile.init(path: path, thumbnail: nil, duration: $0.duration, type: $0.type)
-//                    }
-//                    latestMedia = sharedMediaFiles
-//                    if(setInitialData) {
-//                        initialMedia = latestMedia
-//                    }
-//                    eventSinkMedia?(toJson(data: latestMedia))
-//                }
-//            } else if url.fragment == "file" {
-//                if let key = url.host?.components(separatedBy: "=").last,
-//                   let json = userDefaults?.object(forKey: key) as? Data {
-//                    let sharedArray = decode(data: json)
-//                    let sharedMediaFiles: [SharedMediaFile] = sharedArray.compactMap{
-//                        guard let path = getAbsolutePath(for: $0.path) else {
-//                            return nil
-//                        }
-//                        return SharedMediaFile.init(path: $0.path, thumbnail: nil, duration: nil, type: $0.type)
-//                    }
-//                    latestMedia = sharedMediaFiles
-//                    if(setInitialData) {
-//                        initialMedia = latestMedia
-//                    }
-//                    eventSinkMedia?(toJson(data: latestMedia))
-//                }
-//            } else if url.fragment == "text" {
-//                if let key = url.host?.components(separatedBy: "=").last,
-//                   let sharedArray = userDefaults?.object(forKey: key) as? [String] {
-//                    latestText =  sharedArray.joined(separator: ",")
-//                    if(setInitialData) {
-//                        initialText = latestText
-//                    }
-//                    eventSinkText?(latestText)
-//                }
-//            } else {
-//                latestText = url.absoluteString
-//                if(setInitialData) {
-//                    initialText = latestText
-//                }
-//                eventSinkText?(latestText)
-//            }
-//            return true
+            //            if url.fragment == "media" {
+            //                if let key = url.host?.components(separatedBy: "=").last,
+            //                   let json = userDefaults?.object(forKey: key) as? Data {
+            //                    let sharedMedia = SharedMedia.fromMap(nil)
+            //                    let sharedMediaFiles: [SharedMediaFile] = sharedArray.compactMap {
+            //                        guard let path = getAbsolutePath(for: $0.path) else {
+            //                            return nil
+            //                        }
+            //                        if ($0.type == .video && $0.thumbnail != nil) {
+            //                            let thumbnail = getAbsolutePath(for: $0.thumbnail!)
+            //                            return SharedMediaFile.init(path: path, thumbnail: thumbnail, duration: $0.duration, type: $0.type)
+            //                        } else if ($0.type == .video && $0.thumbnail == nil) {
+            //                            return SharedMediaFile.init(path: path, thumbnail: nil, duration: $0.duration, type: $0.type)
+            //                        }
+            //
+            //                        return SharedMediaFile.init(path: path, thumbnail: nil, duration: $0.duration, type: $0.type)
+            //                    }
+            //                    latestMedia = sharedMediaFiles
+            //                    if(setInitialData) {
+            //                        initialMedia = latestMedia
+            //                    }
+            //                    eventSinkMedia?(toJson(data: latestMedia))
+            //                }
+            //            } else if url.fragment == "file" {
+            //                if let key = url.host?.components(separatedBy: "=").last,
+            //                   let json = userDefaults?.object(forKey: key) as? Data {
+            //                    let sharedArray = decode(data: json)
+            //                    let sharedMediaFiles: [SharedMediaFile] = sharedArray.compactMap{
+            //                        guard let path = getAbsolutePath(for: $0.path) else {
+            //                            return nil
+            //                        }
+            //                        return SharedMediaFile.init(path: $0.path, thumbnail: nil, duration: nil, type: $0.type)
+            //                    }
+            //                    latestMedia = sharedMediaFiles
+            //                    if(setInitialData) {
+            //                        initialMedia = latestMedia
+            //                    }
+            //                    eventSinkMedia?(toJson(data: latestMedia))
+            //                }
+            //            } else if url.fragment == "text" {
+            //                if let key = url.host?.components(separatedBy: "=").last,
+            //                   let sharedArray = userDefaults?.object(forKey: key) as? [String] {
+            //                    latestText =  sharedArray.joined(separator: ",")
+            //                    if(setInitialData) {
+            //                        initialText = latestText
+            //                    }
+            //                    eventSinkText?(latestText)
+            //                }
+            //            } else {
+            //                latestText = url.absoluteString
+            //                if(setInitialData) {
+            //                    initialText = latestText
+            //                }
+            //                eventSinkText?(latestText)
+            //            }
+            //            return true
         }
         latestMedia = nil
         return false
@@ -243,12 +238,7 @@ public class SwiftShareHandlerIosPlatform: NSObject, FlutterPlugin, FlutterStrea
         if let media = media {
             if #available(iOS 11.0, *) {
                 let groupName = INSpeakableString(spokenPhrase: media.speakableGroupName ?? "Unknown Contact")
-                let sendMessageIntent = INSendMessageIntent(recipients: nil,
-                                                            content: nil,
-                                                            speakableGroupName: groupName,
-                                                            conversationIdentifier: media.conversationIdentifier,
-                                                            serviceName: media.serviceName,
-                                                            sender: nil)
+                let sendMessageIntent = INSendMessageIntent(recipients: nil, outgoingMessageType: INOutgoingMessageType.outgoingMessageText, content: nil, speakableGroupName: groupName, conversationIdentifier: media.conversationIdentifier, serviceName: media.serviceName, sender: nil, attachments: nil)
 
                 if #available(iOS 12.0, *) {
                     // Add the user's avatar to the intent.
