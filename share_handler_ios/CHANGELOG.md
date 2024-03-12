@@ -1,3 +1,5 @@
+# 0.0.14
+Fix for iOS 14 compile error when recording a sent message with INOutgoingMessageType
 # 0.0.13
 Fix for iOS 14 deprecation when recording a sent message with INSendMessageIntent
 # 0.0.12
