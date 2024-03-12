@@ -236,18 +236,15 @@ public class SwiftShareHandlerIosPlatform: NSObject, FlutterPlugin, FlutterStrea
     func recordSentMessage(_ media: SharedMedia?, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) {
         // Create an INSendMessageIntent to donate an intent for a conversation with Juan Chavez.
         if let media = media {
-            if #available(iOS 11.0, *) {
+            if #available(iOS 14.0, *) {
                 let groupName = INSpeakableString(spokenPhrase: media.speakableGroupName ?? "Unknown Contact")
                 let sendMessageIntent = INSendMessageIntent(recipients: nil, outgoingMessageType: INOutgoingMessageType.outgoingMessageText, content: nil, speakableGroupName: groupName, conversationIdentifier: media.conversationIdentifier, serviceName: media.serviceName, sender: nil, attachments: nil)
 
-                if #available(iOS 12.0, *) {
-                    // Add the user's avatar to the intent.
-                    if let imagePath = media.imageFilePath {
-                        let imageUrl = URL(fileURLWithPath: imagePath)
-                        let image = INImage.init(url: imageUrl)
-                        sendMessageIntent.setImage(image, forParameterNamed: \.speakableGroupName)
-                    }
-
+                // Add the user's avatar to the intent.
+                if let imagePath = media.imageFilePath {
+                    let imageUrl = URL(fileURLWithPath: imagePath)
+                    let image = INImage.init(url: imageUrl)
+                    sendMessageIntent.setImage(image, forParameterNamed: \.speakableGroupName)
                 }
 
                 // Donate the intent.
