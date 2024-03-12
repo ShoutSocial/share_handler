@@ -1,3 +1,6 @@
+# 0.0.21
+iOS - Fix for iOS 14 compile error when recording a sent message with INOutgoingMessageType
+Android - Add namespace to allow for Gradle 8
 # 0.0.20
 iOS - Fix for iOS 14 deprecation when recording a sent message with INSendMessageIntent
 # 0.0.19
