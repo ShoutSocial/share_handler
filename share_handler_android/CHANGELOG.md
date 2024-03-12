@@ -1,3 +1,5 @@
+# 0.0.8
+Namespace added to support Gradle 8
 # 0.0.7
 Fix problems receiving files on Android "Android/Files/Recent"
 Update to allow for newer dart sdk version
