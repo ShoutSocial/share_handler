@@ -1,4 +1,4 @@
-# 0.0.8
+# 0.0.9
 Namespace added to support Gradle 8
 # 0.0.7
 Fix problems receiving files on Android "Android/Files/Recent"
