@@ -152,34 +152,27 @@ class ShareHandlerPlugin: FlutterPlugin, Messages.ShareHandlerApi, EventChannel.
   }
 
   private fun handleIntent(intent: Intent, initial: Boolean) {
-    val attachments: List<Messages.SharedAttachment>?
-    val text: String?
-    when {
-      (intent.type?.startsWith("text") != true)
-              && (intent.action == Intent.ACTION_SEND
-              || intent.action == Intent.ACTION_SEND_MULTIPLE) -> { // Sharing images or videos
-
-        attachments = attachmentsFromIntent(intent)
-        text = null
-      }
-      (intent.type == null || intent.type?.startsWith("text") == true)
-              && intent.action == Intent.ACTION_SEND -> { // Sharing text
-        text = intent.getStringExtra(Intent.EXTRA_TEXT)
-        attachments = if (text == null) {
-          attachmentsFromIntent(intent)
-        } else {
-          null
-        }
-      }
-      intent.action == Intent.ACTION_VIEW -> { // Opening URL
-        attachments = null
-        text = intent.dataString
-      }
-      else -> {
-        attachments = null
-        text = null
-      }
+    val attachments: List<Messages.SharedAttachment>? = attachmentsFromIntent(intent)
+    val text: String? = when (intent.action) {
+      Intent.ACTION_SEND, Intent.ACTION_SEND_MULTIPLE -> intent.getStringExtra(Intent.EXTRA_TEXT)
+      Intent.ACTION_VIEW -> intent.dataString
+      else -> null
     }
+
+    val conversationIdentifier = intent.getStringExtra("android.intent.extra.shortcut.ID")
+      ?: intent.getStringExtra("conversationIdentifier")
+
+    if (attachments != null || text != null || conversationIdentifier != null) {
+      val media = Messages.SharedMedia.Builder()
+        .setAttachments(attachments)
+        .setContent(text)
+        .setConversationIdentifier(conversationIdentifier)
+        .build()
+      if (initial) initialMedia = media
+      eventSink?.success(media.toMap())
+    }
+  }
+
 //    val conversationIdentifier = intent.getStringExtra(Intent.EXTRA_SHORTCUT_ID)
     val conversationIdentifier = intent.getStringExtra("android.intent.extra.shortcut.ID") ?: intent.getStringExtra("conversationIdentifier")
     if (attachments != null || text != null || conversationIdentifier != null) {
