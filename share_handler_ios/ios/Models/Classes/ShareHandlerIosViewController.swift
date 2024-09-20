@@ -271,8 +271,9 @@ open class ShareHandlerIosViewController: UIViewController {
         userDefaults.synchronize()
 
         while (responder != nil) {
-            if (responder?.responds(to: selectorOpenURL))! {
-                let _ = responder?.perform(selectorOpenURL, with: url)
+            if let application = responder as? UIApplication {
+                application.open(url!, options: [:], completionHandler: nil)
+                break
             }
             responder = responder!.next
         }
