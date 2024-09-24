@@ -26,10 +26,11 @@ open class ShareHandlerIosViewController: UIViewController {
     let fileURLType = UTType.fileURL.identifier
     let dataContentType = UTType.data.identifier
     var sharedAttachments: [SharedAttachment] = []
+    private var fileNameCounter: [String: Int] = [:]
     lazy var userDefaults: UserDefaults = {
         return UserDefaults(suiteName: ShareHandlerIosViewController.appGroupId)!
     }()
-    
+
     public func loadIds() {
             // loading Share extension App Id
             let shareExtensionAppBundleIdentifier = Bundle.main.bundleIdentifier!;
@@ -44,22 +45,22 @@ open class ShareHandlerIosViewController: UIViewController {
             // loading custom AppGroupId from Build Settings or use group.<hostAppBundleIdentifier>
         ShareHandlerIosViewController.appGroupId = (Bundle.main.object(forInfoDictionaryKey: "AppGroupId") as? String) ?? "group.\(ShareHandlerIosViewController.hostAppBundleIdentifier)";
         }
-    
+
     public override func viewDidLoad() {
         super.viewDidLoad();
-        
+
         // load group and app id from build info
                 loadIds();
         Task {
             await handleInputItems()
         }
     }
-    
+
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
     }
-    
+
     func handleInputItems() async {
         if let content = extensionContext!.inputItems[0] as? NSExtensionItem {
             if let contents = content.attachments {
@@ -83,23 +84,23 @@ open class ShareHandlerIosViewController: UIViewController {
                     } catch {
                         self.dismissWithError()
                     }
-                    
+
                 }
             }
             redirectToHostApp()
         }
     }
-    
+
     public func getNewFileUrl(fileName: String) -> URL {
         let newFileUrl = FileManager.default
             .containerURL(forSecurityApplicationGroupIdentifier: ShareHandlerIosViewController.appGroupId)!
             .appendingPathComponent(fileName)
         return newFileUrl
     }
-    
+
     public func handleText (content: NSExtensionItem, attachment: NSItemProvider, index: Int) async throws {
         let data = try await attachment.loadItem(forTypeIdentifier: textContentType, options: nil)
-        
+
         if let item = data as? String {
             sharedText.append(item)
         } else {
@@ -118,22 +119,22 @@ open class ShareHandlerIosViewController: UIViewController {
                 dismissWithError()
             }
         }
-    } 
-    
+    }
+
     public func handleUrl (content: NSExtensionItem, attachment: NSItemProvider, index: Int) async throws {
         let data = try await attachment.loadItem(forTypeIdentifier: urlContentType, options: nil)
-        
+
             if let item = data as? URL {
                 sharedText.append(item.absoluteString)
             } else {
                 dismissWithError()
             }
-        
+
     }
-    
+
     public func handleImages (content: NSExtensionItem, attachment: NSItemProvider, index: Int) async throws {
         let data = try await attachment.loadItem(forTypeIdentifier: imageContentType, options: nil)
-            
+
         var fileName: String?
         var imageData: Data?
         var sourceUrl: URL?
@@ -147,7 +148,7 @@ open class ShareHandlerIosViewController: UIViewController {
             fileName = UUID().uuidString + ".png"
             imageData = image.pngData()
         }
-        
+
         if let _fileName = fileName {
             let newFileUrl = getNewFileUrl(fileName: _fileName)
             do {
@@ -157,35 +158,35 @@ open class ShareHandlerIosViewController: UIViewController {
             } catch {
                 print("Error removing item")
             }
-            
-            
+
+
             var copied: Bool = false
             if let _data = imageData {
                 copied = FileManager.default.createFile(atPath: newFileUrl.path, contents: _data)
             } else if let _sourceUrl = sourceUrl {
                 copied = copyFile(at: _sourceUrl, to: newFileUrl)
             }
-            
+
             if (copied) {
                 sharedAttachments.append(SharedAttachment.init(path:  newFileUrl.absoluteString, type: .image))
             } else {
                 dismissWithError()
                 return
             }
-            
+
         } else {
             dismissWithError()
             return
         }
-        
+
     }
-    
+
     public func handleVideos (content: NSExtensionItem, attachment: NSItemProvider, index: Int) async throws {
         let data = try await attachment.loadItem(forTypeIdentifier: movieContentType, options: nil)
-         
-            
+
+
         if let url = data as? URL {
-            
+
             // Always copy
             let fileName = getFileName(from: url, type: .video)
             let newFileUrl = getNewFileUrl(fileName: fileName)
@@ -196,14 +197,14 @@ open class ShareHandlerIosViewController: UIViewController {
         } else {
             dismissWithError()
         }
-        
+
     }
-    
+
     public func handleFiles (content: NSExtensionItem, attachment: NSItemProvider, index: Int) async throws {
         let data = try await attachment.loadItem(forTypeIdentifier: fileURLType, options: nil)
-         
+
         if let url = data as? URL {
-            
+
             // Always copy
             let fileName = getFileName(from :url, type: .file)
             let newFileUrl = getNewFileUrl(fileName: fileName)
@@ -214,14 +215,14 @@ open class ShareHandlerIosViewController: UIViewController {
         } else {
             dismissWithError()
         }
-        
+
     }
-    
+
     public func handleData (content: NSExtensionItem, attachment: NSItemProvider, index: Int) async throws {
         let data = try await attachment.loadItem(forTypeIdentifier: dataContentType, options: nil)
-         
+
         if let url = data as? URL {
-            
+
             // Always copy
             let fileName = getFileName(from :url, type: .file)
             let newFileUrl = getNewFileUrl(fileName: fileName)
@@ -232,64 +233,65 @@ open class ShareHandlerIosViewController: UIViewController {
         } else {
             dismissWithError()
         }
-        
+
     }
-    
+
     public func dismissWithError() {
         print("[ERROR] Error loading data!")
         let alert = UIAlertController(title: "Error", message: "Error loading data", preferredStyle: .alert)
-        
+
         let action = UIAlertAction(title: "Error", style: .cancel) { _ in
             self.dismiss(animated: true, completion: nil)
         }
-        
+
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
         extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
     }
-    
+
     public func redirectToHostApp() {
         // ids may not loaded yet so we need loadIds here too
         loadIds();
         let url = URL(string: "ShareMedia-\(ShareHandlerIosViewController.hostAppBundleIdentifier)://\(ShareHandlerIosViewController.hostAppBundleIdentifier)?key=\(sharedKey)")
         var responder = self as UIResponder?
         let selectorOpenURL = sel_registerName("openURL:")
-        
+
         let intent = self.extensionContext?.intent as? INSendMessageIntent
-        
+
         let conversationIdentifier = intent?.conversationIdentifier
         let sender = intent?.sender
         let serviceName = intent?.serviceName
         let speakableGroupName = intent?.speakableGroupName
-        
+
         let sharedMedia = SharedMedia.init(attachments: sharedAttachments, conversationIdentifier: conversationIdentifier, content: sharedText.joined(separator: "\n"), speakableGroupName: speakableGroupName?.spokenPhrase, serviceName: serviceName, senderIdentifier: sender?.contactIdentifier ?? sender?.customIdentifier, imageFilePath: nil)
-        
+
         let json = sharedMedia.toJson()
-        
+
         userDefaults.set(json, forKey: sharedKey)
         userDefaults.synchronize()
-        
+
         while (responder != nil) {
-            if (responder?.responds(to: selectorOpenURL))! {
-                let _ = responder?.perform(selectorOpenURL, with: url)
+            if let application = responder as? UIApplication {
+                application.open(url!, options: [:], completionHandler: nil)
+                break
             }
             responder = responder!.next
         }
     }
-    
+
     enum RedirectType {
         case media
         case text
         case file
     }
-    
+
     func getExtension(from url: URL, type: SharedAttachmentType) -> String {
         let parts = url.lastPathComponent.components(separatedBy: ".")
         var ex: String? = nil
         if (parts.count > 1) {
             ex = parts.last
         }
-        
+
         if (ex == nil) {
             switch type {
             case .image:
@@ -304,17 +306,21 @@ open class ShareHandlerIosViewController: UIViewController {
         }
         return ex ?? "Unknown"
     }
-    
+
     func getFileName(from url: URL, type: SharedAttachmentType) -> String {
         var name = url.lastPathComponent
-        
         if (name.isEmpty) {
             name = UUID().uuidString + "." + getExtension(from: url, type: type)
         }
-        
+        if let count = fileNameCounter[name] {
+            fileNameCounter[name] = count + 1
+            name = "\((name as NSString).deletingPathExtension)_\(count + 1).\((name as NSString).pathExtension)"
+        } else {
+            fileNameCounter[name] = 1
+        }
         return name
     }
-    
+
     func copyFile(at srcURL: URL, to dstURL: URL) -> Bool {
         do {
             if FileManager.default.fileExists(atPath: dstURL.path) {
