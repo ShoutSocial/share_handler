@@ -1,8 +1,7 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'dart:async';
-
 import 'package:share_handler/share_handler.dart';
 
 void main() {
@@ -10,7 +9,7 @@ void main() {
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -59,8 +58,8 @@ class _MyAppState extends State<MyApp> {
               const SizedBox(height: 10),
               Text("Shared files: ${media?.attachments?.length}"),
               ...(media?.attachments ?? []).map((attachment) {
-                final _path = attachment?.path;
-                if (_path != null &&
+                final path = attachment?.path;
+                if (path != null &&
                     attachment?.type == SharedAttachmentType.image) {
                   return Column(
                     children: [
@@ -70,14 +69,14 @@ class _MyAppState extends State<MyApp> {
                             conversationIdentifier:
                                 "custom-conversation-identifier",
                             conversationName: "John Doe",
-                            conversationImageFilePath: _path,
+                            conversationImageFilePath: path,
                             serviceName: "custom-service-name",
                           );
                         },
                         child: const Text("Record message"),
                       ),
                       const SizedBox(height: 10),
-                      Image.file(File(_path)),
+                      Image.file(File(path)),
                     ],
                   );
                 } else {
