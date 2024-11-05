@@ -1,4 +1,5 @@
 # 0.0.15
+Fix for iOS 18
 Fix getFileName function to handle duplicate filenames
 Fix UIApplication.openURL is deprecated
 # 0.0.14
