@@ -261,8 +261,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-import 'package:share_handler_platform_interface/messages.dart';
-import 'package:share_handler_platform_interface/share_handler_platform_interface.dart';
+import 'package:share_handler/share_handler.dart';
 
 void main() {
   runApp(const MyApp());
