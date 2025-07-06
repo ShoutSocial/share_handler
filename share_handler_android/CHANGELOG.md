@@ -1,3 +1,5 @@
+# 0.0.10
+Starting app from 'recent applications' starts it with the last intent
 # 0.0.9
 Namespace added to support Gradle 8
 # 0.0.7
