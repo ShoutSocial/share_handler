@@ -141,7 +141,13 @@ class ShareHandlerPlugin : FlutterPlugin, Messages.ShareHandlerApi, EventChannel
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
     this.binding = binding
     binding.addOnNewIntentListener(this)
-    handleIntent(binding.activity.intent, true)
+    val flags: Int = binding.activity.intent.flags
+    if ((flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) != 0) {
+      // The activity was launched from history
+      Log.w("TAG", "Handle skip: The activity was launched from history")
+    } else {
+      handleIntent(binding.activity.intent, true)
+    }
   }
 
   override fun onDetachedFromActivityForConfigChanges() {
