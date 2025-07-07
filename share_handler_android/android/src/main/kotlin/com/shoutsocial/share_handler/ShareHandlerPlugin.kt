@@ -96,9 +96,6 @@ class ShareHandlerPlugin : FlutterPlugin, Messages.ShareHandlerApi, EventChannel
       action = Intent.ACTION_SEND
       putExtra("conversationIdentifier", media.conversationIdentifier)
     }
-//    val intent = Intent(Intent.ACTION_VIEW).apply {
-//      putExtra("conversationIdentifier", media.conversationIdentifier)
-//    }
     val shortcutTarget = "$packageName.dynamic_share_target"
     val shortcutBuilder = ShortcutInfoCompat.Builder(applicationContext, media.conversationIdentifier ?: "")
       .setShortLabel(media.speakableGroupName ?: "Unknown")
@@ -178,7 +175,6 @@ class ShareHandlerPlugin : FlutterPlugin, Messages.ShareHandlerApi, EventChannel
 
     val text: String? = when (intent.action) {
       Intent.ACTION_SEND, Intent.ACTION_SEND_MULTIPLE -> intent.getStringExtra(Intent.EXTRA_TEXT)
-      Intent.ACTION_VIEW -> intent.dataString
       else -> null
     }
 
