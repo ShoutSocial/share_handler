@@ -167,7 +167,6 @@ class ShareViewController: ShareHandlerIosViewController {}
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 .....
  >
- <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
   <application
         android:name="io.flutter.app.FlutterApplication"
