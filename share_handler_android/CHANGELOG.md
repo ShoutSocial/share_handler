@@ -1,3 +1,6 @@
+# 0.0.11
+Upgrade Android dependencies and tools
+Upgrade Gradle version to 8.11.1
 # 0.0.10
 Starting app from 'recent applications' starts it with the last intent
 # 0.0.9
