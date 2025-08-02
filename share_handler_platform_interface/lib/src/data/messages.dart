@@ -57,7 +57,7 @@ class SharedMedia {
   });
 
   /// List of shared attachments (ex. images, videos, pdfs, etc.). Each attachment has an attachment type and a path to the file on the device.
-  List<SharedAttachment?>? attachments;
+  List<SharedAttachment>? attachments;
 
   /// iOS only: List of recipient identifiers from iOS intent.
   List<String?>? recipientIdentifiers;
@@ -96,9 +96,9 @@ class SharedMedia {
   static SharedMedia decode(Object message) {
     final Map<Object?, Object?> pigeonMap = message as Map<Object?, Object?>;
     return SharedMedia(
-      attachments: (pigeonMap['attachments'] as List<Object?>?)
-          ?.map((e) => SharedAttachment.decode(e as Map<Object?, Object?>))
-          .cast<SharedAttachment?>()
+      attachments: (pigeonMap['attachments'] as List<dynamic>?)
+          ?.cast<Map<Object?, Object?>>()
+          .map(SharedAttachment.decode)
           .toList(),
       recipientIdentifiers: (pigeonMap['recipientIdentifiers'] as List<Object?>?)?.cast<String?>(),
       conversationIdentifier: pigeonMap['conversationIdentifier'] as String?,
