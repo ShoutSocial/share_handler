@@ -110,6 +110,12 @@ public class Messages {
       this.content = setterArg;
     }
 
+    private @Nullable String subject;
+    public @Nullable String getSubject() { return subject; }
+    public void setSubject(@Nullable String setterArg) {
+      this.subject = setterArg;
+    }
+
     private @Nullable String speakableGroupName;
     public @Nullable String getSpeakableGroupName() { return speakableGroupName; }
     public void setSpeakableGroupName(@Nullable String setterArg) {
@@ -150,6 +156,11 @@ public class Messages {
         this.content = setterArg;
         return this;
       }
+      private @Nullable String subject;
+      public @NonNull Builder setSubject(@Nullable String setterArg) {
+        this.subject = setterArg;
+        return this;
+      }
       private @Nullable String speakableGroupName;
       public @NonNull Builder setSpeakableGroupName(@Nullable String setterArg) {
         this.speakableGroupName = setterArg;
@@ -175,6 +186,7 @@ public class Messages {
         pigeonReturn.setAttachments(attachments);
         pigeonReturn.setConversationIdentifier(conversationIdentifier);
         pigeonReturn.setContent(content);
+        pigeonReturn.setSubject(subject);
         pigeonReturn.setSpeakableGroupName(speakableGroupName);
         pigeonReturn.setServiceName(serviceName);
         pigeonReturn.setSenderIdentifier(senderIdentifier);
@@ -191,6 +203,7 @@ public class Messages {
       toMapResult.put("attachments", list.isEmpty() ? null : list);
       toMapResult.put("conversationIdentifier", conversationIdentifier);
       toMapResult.put("content", content);
+      toMapResult.put("subject", subject);
       toMapResult.put("speakableGroupName", speakableGroupName);
       toMapResult.put("serviceName", serviceName);
       toMapResult.put("senderIdentifier", senderIdentifier);
@@ -209,6 +222,8 @@ public class Messages {
       pigeonResult.setConversationIdentifier((String)conversationIdentifier);
       Object content = map.get("content");
       pigeonResult.setContent((String)content);
+      Object subject = map.get("subject");
+      pigeonResult.setSubject((String)subject);
       Object speakableGroupName = map.get("speakableGroupName");
       pigeonResult.setSpeakableGroupName((String)speakableGroupName);
       Object serviceName = map.get("serviceName");
