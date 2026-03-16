@@ -50,6 +50,7 @@ class SharedMedia {
     this.recipientIdentifiers,
     this.conversationIdentifier,
     this.content,
+    this.subject,
     this.speakableGroupName,
     this.serviceName,
     this.senderIdentifier,
@@ -67,6 +68,9 @@ class SharedMedia {
 
   /// Text content that was shared if any. Could be a url as well.
   String? content;
+
+  /// The subject of the shared content.
+  String? subject;
 
   /// The name of the recipient the content was shared to if specified.
   String? speakableGroupName;
@@ -86,6 +90,7 @@ class SharedMedia {
     pigeonMap['recipientIdentifiers'] = recipientIdentifiers;
     pigeonMap['conversationIdentifier'] = conversationIdentifier;
     pigeonMap['content'] = content;
+    pigeonMap['subject'] = subject;
     pigeonMap['speakableGroupName'] = speakableGroupName;
     pigeonMap['serviceName'] = serviceName;
     pigeonMap['senderIdentifier'] = senderIdentifier;
@@ -103,6 +108,7 @@ class SharedMedia {
       recipientIdentifiers: (pigeonMap['recipientIdentifiers'] as List<Object?>?)?.cast<String?>(),
       conversationIdentifier: pigeonMap['conversationIdentifier'] as String?,
       content: pigeonMap['content'] as String?,
+      subject: pigeonMap['subject'] as String?,
       speakableGroupName: pigeonMap['speakableGroupName'] as String?,
       serviceName: pigeonMap['serviceName'] as String?,
       senderIdentifier: pigeonMap['senderIdentifier'] as String?,

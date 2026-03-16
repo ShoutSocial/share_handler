@@ -178,6 +178,11 @@ class ShareHandlerPlugin : FlutterPlugin, Messages.ShareHandlerApi, EventChannel
       else -> null
     }
 
+    val subject: String? = when (intent.action) {
+      Intent.ACTION_SEND, Intent.ACTION_SEND_MULTIPLE -> intent.getStringExtra(Intent.EXTRA_SUBJECT)
+      else -> null
+    }
+
     val conversationIdentifier = intent.getStringExtra("android.intent.extra.shortcut.ID")
       ?: intent.getStringExtra("conversationIdentifier")
 
@@ -185,6 +190,7 @@ class ShareHandlerPlugin : FlutterPlugin, Messages.ShareHandlerApi, EventChannel
       val mediaBuilder = Messages.SharedMedia.Builder()
       attachments?.let { mediaBuilder.setAttachments(it) }
       text?.let { mediaBuilder.setContent(it) }
+      subject?.let { mediaBuilder.setSubject(it) }
       conversationIdentifier?.let { mediaBuilder.setConversationIdentifier(it) }
       val media = mediaBuilder.build()
 

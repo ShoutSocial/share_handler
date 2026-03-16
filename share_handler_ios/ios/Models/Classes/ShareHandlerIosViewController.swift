@@ -87,7 +87,7 @@ open class ShareHandlerIosViewController: UIViewController {
 
                 }
             }
-            redirectToHostApp()
+            redirectToHostApp(content: content)
         }
     }
 
@@ -249,7 +249,7 @@ open class ShareHandlerIosViewController: UIViewController {
         extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
     }
 
-    public func redirectToHostApp() {
+    public func redirectToHostApp(content: NSExtensionItem) {
         // ids may not loaded yet so we need loadIds here too
         loadIds();
         let url = URL(string: "ShareMedia-\(ShareHandlerIosViewController.hostAppBundleIdentifier)://\(ShareHandlerIosViewController.hostAppBundleIdentifier)?key=\(sharedKey)")
@@ -262,8 +262,9 @@ open class ShareHandlerIosViewController: UIViewController {
         let sender = intent?.sender
         let serviceName = intent?.serviceName
         let speakableGroupName = intent?.speakableGroupName
+        let subject = content.userInfo?[NSItemProvider.ItemKey.title] as? String
 
-        let sharedMedia = SharedMedia.init(attachments: sharedAttachments, conversationIdentifier: conversationIdentifier, content: sharedText.joined(separator: "\n"), speakableGroupName: speakableGroupName?.spokenPhrase, serviceName: serviceName, senderIdentifier: sender?.contactIdentifier ?? sender?.customIdentifier, imageFilePath: nil)
+        let sharedMedia = SharedMedia.init(attachments: sharedAttachments, conversationIdentifier: conversationIdentifier, content: sharedText.joined(separator: "\n"), subject: subject, speakableGroupName: speakableGroupName?.spokenPhrase, serviceName: serviceName, senderIdentifier: sender?.contactIdentifier ?? sender?.customIdentifier, imageFilePath: nil)
 
         let json = sharedMedia.toJson()
 
