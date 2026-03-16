@@ -164,24 +164,11 @@ class ShareViewController: ShareHandlerIosViewController {}
 1. Edit your Android Manifest file, located in `<project root>/android/app/src/main/AndroidManifest.xml` and add/uncomment the intent filters and meta data that you want to support:
 
 ```xml
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-.....
- >
- <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+<manifest ...>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
-  <application
-        android:name="io.flutter.app.FlutterApplication"
-        ...
-        >
-
-    <activity
-            android:name=".MainActivity"
-            android:launchMode="singleTop"
-            android:theme="@style/LaunchTheme"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-            android:hardwareAccelerated="true"
-            android:windowSoftInputMode="adjustResize">
-
+    <application ...>
+        <activity ...>
              <!--TODO: Add this filter if you want to handle shared text-->
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -233,9 +220,8 @@ class ShareViewController: ShareHandlerIosViewController {}
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/share_targets" />
-      </activity>
-
-  </application>
+        </activity>
+    </application>
 </manifest>
 ```
 
