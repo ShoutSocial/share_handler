@@ -218,6 +218,11 @@ class ShareHandlerPlugin : FlutterPlugin, Messages.ShareHandlerApi, EventChannel
         return value
       }
 
+      Intent.ACTION_VIEW -> {
+        val uri = intent.data ?: return null
+        return listOf(attachmentForUri(uri)).mapNotNull { it }
+      }
+
       else -> null
     }
   }
