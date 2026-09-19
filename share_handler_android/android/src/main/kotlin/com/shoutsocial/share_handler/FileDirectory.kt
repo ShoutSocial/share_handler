@@ -101,7 +101,8 @@ object FileDirectory {
                     val fileName: String? = cursor.getString(columnIndex)
                     Log.i("FileDirectory", "File name: $fileName")
                     if (!fileName.isNullOrBlank()) {
-                        targetFile = File(context.cacheDir, fileName)
+                        // The display name comes from the sending app: never use it as a path.
+                        targetFile = safeCacheFile(context.cacheDir, fileName)
                     }
                 }
             } finally {

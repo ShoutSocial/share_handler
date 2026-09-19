@@ -248,7 +248,8 @@ class ShareHandlerPlugin : FlutterPlugin, Messages.ShareHandlerApi, EventChannel
       val fileName = getFileNameFromUri(contentResolver, uri, mimeType) ?: return null
 
       // Create a new file in the cache directory with the correct file name
-      val newFile = File(applicationContext.cacheDir, fileName)
+      // The display name comes from the sending app: never use it as a path.
+      val newFile = safeCacheFile(applicationContext.cacheDir, fileName) ?: return null
 
       // Copy the contents from the URI to the new file
       val success = copyFile(contentResolver, uri, newFile)
