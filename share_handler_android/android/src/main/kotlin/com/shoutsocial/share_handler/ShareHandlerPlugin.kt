@@ -188,7 +188,15 @@ class ShareHandlerPlugin : FlutterPlugin, Messages.ShareHandlerApi, EventChannel
       conversationIdentifier?.let { mediaBuilder.setConversationIdentifier(it) }
       val media = mediaBuilder.build()
 
-      if (initial) {
+      // Keep the media as "initial" when this is the launch intent OR when
+      // nobody is listening on the Dart side yet. The second case happens when
+      // the process was killed but the task is still in recents: with
+      // launchMode="singleTask" Android recreates the activity with its
+      // original (launcher) intent and then delivers the share through
+      // onNewIntent, before the Dart engine has subscribed to the event
+      // channel. Without this, the share is silently dropped and
+      // getInitialSharedMedia() returns null.
+      if (initial || eventSink == null) {
         synchronized(this) {
           initialMedia = media
         }
@@ -197,7 +205,7 @@ class ShareHandlerPlugin : FlutterPlugin, Messages.ShareHandlerApi, EventChannel
       if (eventSink != null) {
         eventSink?.success(media.toMap())
       } else {
-        Log.w("TAG", "EventSink is not available")
+        Log.w("TAG", "EventSink is not available, stored as initial media")
       }
     }
   }
