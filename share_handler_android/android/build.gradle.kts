@@ -1,5 +1,5 @@
-group 'de.joernto.share_handler'
-version '1.0-SNAPSHOT'
+group = "de.joernto.share_handler"
+version = "1.0-SNAPSHOT"
 
 buildscript {
     val kotlinVersion = "2.4.0"
