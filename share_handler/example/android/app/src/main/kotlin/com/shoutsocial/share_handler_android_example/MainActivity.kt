@@ -1,4 +1,4 @@
-package de.joernto.share_handler_android_example
+package com.shoutsocial.share_handler_android_example
 
 import io.flutter.embedding.android.FlutterActivity
 

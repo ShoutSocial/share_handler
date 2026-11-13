@@ -1,4 +1,4 @@
-group = "de.joernto.share_handler"
+group = "com.shoutsocial.share_handler"
 version = "1.0-SNAPSHOT"
 
 buildscript {
@@ -26,7 +26,7 @@ plugins {
 }
 
 android {
-    namespace = "de.joernto.share_handler"
+    namespace = "com.shoutsocial.share_handler"
     compileSdk = 36
 
     compileOptions {

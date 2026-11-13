@@ -1,4 +1,4 @@
-package de.joernto.share_handler
+package com.shoutsocial.share_handler
 
 import android.content.ContentUris
 import android.content.Context

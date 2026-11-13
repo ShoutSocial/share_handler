@@ -4,7 +4,7 @@
 <dict>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.de.joernto.shareHandlerIosExample</string>
+		<string>group.com.shoutsocial.shareHandlerIosExample</string>
 	</array>
 </dict>
 </plist>

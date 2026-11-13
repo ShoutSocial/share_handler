@@ -23,6 +23,6 @@ flutter:
   plugin:
     platforms:
       android:
-        package: de.joernto.share_handler
+        package: com.shoutsocial.share_handler
         pluginClass: ShareHandlerPlugin
       

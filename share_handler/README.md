@@ -126,7 +126,7 @@ First, add `share_handler` as a [dependency in your pubspec.yaml file](https://f
 4. Add a group identifier to both the Runner and ShareExtension Targets
    - In Xcode, select Runner -> Targets -> Runner -> Signing & Capabilities
    - Click the '+' button and select 'App Groups'
-   - Add a new group (default is your bundle identifier prefixed by 'group.'. ex. 'group.de.joernto')
+   - Add a new group (default is your bundle identifier prefixed by 'group.'. ex. 'group.com.shoutsocial')
    - Repeat those 3 steps inside of the 'ShareExtension' target adding/selecting the same group id
 5. (Optional) If you made a custom group identifier that isn't your bundle identifier prefixed by 'group.', make sure to add a custom build setting variable that is referenced in your shareExtension's info.plist file.
    - Go to Targets -> ShareExtension -> Build Settings

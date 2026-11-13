@@ -6,7 +6,7 @@ import 'package:share_handler_platform_interface/share_handler_platform_interfac
 class ShareHandlerAndroidPlatform extends ShareHandlerPlatform {
   final ShareHandlerApi _api = ShareHandlerApi();
   static const EventChannel eventChannel =
-      EventChannel("de.joernto.share_handler/sharedMediaStream");
+      EventChannel("com.shoutsocial.share_handler/sharedMediaStream");
   static Stream<SharedMedia>? _sharedMediaStream;
 
   static void registerWith() {
