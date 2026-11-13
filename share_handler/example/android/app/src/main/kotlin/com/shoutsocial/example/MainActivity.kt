@@ -1,4 +1,4 @@
-package com.shoutsocial.example
+package de.joernto.example
 
 import io.flutter.embedding.android.FlutterActivity
 

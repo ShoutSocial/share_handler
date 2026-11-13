@@ -17,7 +17,7 @@ import 'package:share_handler_platform_interface/share_handler_platform_interfac
 class MethodChannelShareHandler extends ShareHandlerPlatform {
   final ShareHandlerApi _api = ShareHandlerApi();
   static const EventChannel eventChannel =
-      EventChannel("com.shoutsocial.share_handler/sharedMediaStream");
+      EventChannel("de.joernto.share_handler/sharedMediaStream");
   static Stream<SharedMedia>? _sharedMediaStream;
 
   @override

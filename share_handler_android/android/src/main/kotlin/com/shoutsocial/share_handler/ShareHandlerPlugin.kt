@@ -1,4 +1,4 @@
-package com.shoutsocial.share_handler
+package de.joernto.share_handler
 
 import android.content.ContentResolver
 import android.content.Context
@@ -26,7 +26,7 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.net.URLConnection
 
-private const val kEventsChannel = "com.shoutsocial.share_handler/sharedMediaStream"
+private const val kEventsChannel = "de.joernto.share_handler/sharedMediaStream"
 
 /** ShareHandlerPlugin */
 class ShareHandlerPlugin : FlutterPlugin, Messages.ShareHandlerApi, EventChannel.StreamHandler, ActivityAware,

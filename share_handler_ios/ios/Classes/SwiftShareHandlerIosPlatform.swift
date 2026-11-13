@@ -13,7 +13,7 @@ public class SwiftShareHandlerIosPlatform: NSObject, FlutterPlugin, FlutterStrea
     //       registrar.addMethodCallDelegate(instance, channel: channel)
     //     }
 
-    static let kEventsChannel = "com.shoutsocial.share_handler/sharedMediaStream"
+    static let kEventsChannel = "de.joernto.share_handler/sharedMediaStream"
 
     private var customSchemePrefix = "ShareMedia"
 
